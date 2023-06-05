@@ -1,0 +1,27 @@
+const axios = require('axios');
+const sharp = require('sharp');
+sharp.cache(false);
+
+const fetchAndCompressImage = async (url, size) => {
+    const width = size ? Number(size) : 160;
+
+    const hiBobImage = await axios.get(url, {
+        headers: {
+            Authorization: process.env.HIBOB_API_KEY
+        },
+
+        responseType: 'arraybuffer'
+    });
+
+    const imageBuffer = Buffer.from(hiBobImage.data, 'binary');
+    const metadata = await sharp(imageBuffer).metadata();
+    const aspectRatio = metadata.width / metadata.height;
+    const height = Math.round(width / aspectRatio);
+
+    return await sharp(imageBuffer)
+        .resize(width, height)
+        .webp({ quality: 100 })
+        .toBuffer();
+};
+
+module.exports = fetchAndCompressImage;
