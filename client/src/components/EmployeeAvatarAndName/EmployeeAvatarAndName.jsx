@@ -1,10 +1,9 @@
-import styles from '../Team/Team.module.scss'
-import { useSearchStore } from '../NavBar/NavBar'
-import classNames from 'classnames'
-import { memo, useCallback, useEffect, useState } from 'react'
+import styles from '../Team/Team.module.scss';
+import { useSearchStore } from '../NavBar/NavBar';
+import classNames from 'classnames';
+import { memo, useCallback, useEffect, useState } from 'react';
 
-const Component = memo(({ isLoading, url, fullName, className }) => {
-    console.log('rendering', fullName)
+const Avatar = memo(({ isLoading, url, fullName, className }) => {
     return (
         <>
             {isLoading ? (
@@ -16,16 +15,16 @@ const Component = memo(({ isLoading, url, fullName, className }) => {
             )}
             <span style={{ color: 'white' }}>{fullName}</span>
         </>
-    )
-})
+    );
+});
 
-const EmployeeAvatarAndName = ({ fullName, id, url, isLoading }) => {
-    const searchQuery = useSearchStore((state) => state.searchQuery)
-    const [className, setClassName] = useState('')
+const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
+    const searchQuery = useSearchStore((state) => state.searchQuery);
+    const [className, setClassName] = useState('');
 
     const handleMouseEnter = useCallback(() => {
-        setClassName(classNames([styles.avatar]))
-    }, [])
+        setClassName(classNames([styles.avatar]));
+    }, []);
 
     useEffect(() => {
         //setHovered(false)
@@ -36,20 +35,20 @@ const EmployeeAvatarAndName = ({ fullName, id, url, isLoading }) => {
                 searchQuery.length >= 3 &&
                 fullName.toLowerCase().includes(searchQuery.toLowerCase())
                     ? styles.highlight
-                    : '',
+                    : ''
             ])
-        )
-    }, [searchQuery, fullName])
+        );
+    }, [searchQuery, fullName]);
 
     return (
         <div onMouseEnter={handleMouseEnter}>
-            <Component
+            <Avatar
                 isLoading={isLoading}
                 url={url}
                 fullName={fullName}
                 className={className}
             />
         </div>
-    )
-}
-export default EmployeeAvatarAndName
+    );
+};
+export default EmployeeAvatarAndName;

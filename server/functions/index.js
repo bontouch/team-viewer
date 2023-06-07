@@ -1,4 +1,5 @@
 const express = require('express');
+//const cors = require('cors');
 const functions = require('firebase-functions');
 require('firebase-functions/logger/compat');
 
@@ -9,6 +10,23 @@ const applyAuthMiddleware = require('./applyAuthMiddleWare');
 const getTeams = require('./getTeams');
 
 const app = express();
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     next();
+// });
+// app.use(
+//     cors({
+//         origin: '*'
+//     })
+// );
+// app.use(
+//     cors({
+//         origin: [
+//             'https://team-viewer-91062.web.app',
+//             'https://team-viewer-91062.firebaseapp.com'
+//         ]
+//     })
+// );
 
 app.get('/avatars', async (req, res) => {
     try {

@@ -1,29 +1,29 @@
-import { useEffect, useMemo } from 'react'
-import useTeams from '../../helpers/useTeams'
-import styles from './Teams.module.scss'
-import Loader from '../../components/Loader/Loader'
-import Team from '../../components/Team/Team'
-import { useSearchStore } from '../../components/NavBar/NavBar'
-import useAvatars from '../../helpers/useAvatars'
-import create from 'zustand'
+import { useEffect, useMemo } from 'react';
+import useTeams from '../../helpers/useTeams';
+import styles from './Teams.module.scss';
+import Loader from '../../components/Loader/Loader';
+import Team from '../../components/Team/Team';
+import { useSearchStore } from '../../components/NavBar/NavBar';
+import useAvatars from '../../helpers/useAvatars';
+import create from 'zustand';
 
 export const useSuggestionsStore = create((set) => ({
     suggestions: [],
-    setSuggestions: (suggestions) => set((state) => ({ suggestions })),
-}))
+    setSuggestions: (suggestions) => set(() => ({ suggestions }))
+}));
 
 const Teams = () => {
-    const { data: teams, isLoading } = useTeams()
-    useAvatars()
-    const searchQuery = useSearchStore((state) => state.searchQuery)
-    const setSuggestions = useSuggestionsStore((state) => state.setSuggestions)
+    const { data: teams, isLoading } = useTeams();
+    useAvatars();
+    const searchQuery = useSearchStore((state) => state.searchQuery);
+    const setSuggestions = useSuggestionsStore((state) => state.setSuggestions);
     const teamKeysSorted = useMemo(() => {
-        if (isLoading) return []
-        return Object.keys(teams).sort()
-    }, [teams, isLoading])
+        if (isLoading) return [];
+        return Object.keys(teams).sort();
+    }, [teams, isLoading]);
 
     const suggestions = useMemo(() => {
-        if (searchQuery === '') return []
+        if (searchQuery === '') return [];
         return [
             ...teamKeysSorted.filter((teamKey) =>
                 teamKey.toLowerCase().includes(searchQuery.toLowerCase())
@@ -37,19 +37,17 @@ const Teams = () => {
                                 .includes(searchQuery.toLowerCase())
                         )?.fullName
                 )
-                .filter(function (element) {
-                    return element !== undefined
-                })
+                .filter((element) => element !== undefined)
                 .reduce((curr, next) => {
-                    if (!(curr.indexOf(next) >= 0)) curr.push(next)
-                    return curr
-                }, []),
-        ]
-    }, [searchQuery, teamKeysSorted, teams])
+                    if (!(curr.indexOf(next) >= 0)) curr.push(next);
+                    return curr;
+                }, [])
+        ];
+    }, [searchQuery, teamKeysSorted, teams]);
 
     useEffect(() => {
-        setSuggestions(suggestions)
-    }, [suggestions, setSuggestions])
+        setSuggestions(suggestions);
+    }, [suggestions, setSuggestions]);
 
     if (isLoading) {
         return (
@@ -58,7 +56,7 @@ const Teams = () => {
                     <Loader />
                 </span>
             </div>
-        )
+        );
     }
 
     return (
@@ -67,7 +65,7 @@ const Teams = () => {
                 <p>nothing to see here</p>
             ) : null}
             {teamKeysSorted.map((teamKey) => {
-                const teamEmployees = teams[teamKey]
+                const teamEmployees = teams[teamKey];
                 const show =
                     searchQuery === '' ||
                     teamKey.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -75,12 +73,12 @@ const Teams = () => {
                         employee.fullName
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase())
-                    )
+                    );
                 return (
                     <span
                         key={teamKey}
                         style={{
-                            display: `${show ? 'block' : 'none'}`,
+                            display: `${show ? 'block' : 'none'}`
                         }}
                     >
                         <Team
@@ -89,10 +87,10 @@ const Teams = () => {
                             employees={teams[teamKey]}
                         />
                     </span>
-                )
+                );
             })}
         </div>
-    )
-}
+    );
+};
 
-export default Teams
+export default Teams;

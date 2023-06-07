@@ -1,117 +1,102 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import create from 'zustand'
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import create from 'zustand';
 
-import { useAuth } from '../../helpers/useAuth'
+import { useAuth } from '../../helpers/useAuth';
 
-import logo from '../../images/BTLogo.png'
+import logo from '../../images/BTLogo.png';
 
-import styles from './NavBar.module.scss'
-import { useSuggestionsStore } from '../../pages/Teams/Teams'
-import useClickOutside from '../../helpers/useClickOutside'
-import useKeyPressed from '../../helpers/useKeyPressed'
+import styles from './NavBar.module.scss';
+import { useSuggestionsStore } from '../../pages/Teams/Teams';
+import useClickOutside from '../../helpers/useClickOutside';
+import useKeyPressed from '../../helpers/useKeyPressed';
 
 export const useSearchStore = create((set) => ({
     searchQuery: '',
-    setSearchQuery: (query) => set((state) => ({ searchQuery: query })),
-}))
+    setSearchQuery: (query) => set(() => ({ searchQuery: query }))
+}));
 
 const NavBar = () => {
-    const { token, onLogout } = useAuth()
-    const setSearchQuery = useSearchStore((state) => state.setSearchQuery)
-    const suggestions = useSuggestionsStore((state) => state.suggestions)
-    const [inputValue, setInputValue] = useState('')
-    const inputRef = useRef(null)
-    const [inputClientRect, setInputClientRect] = useState(null)
-    const [open, setOpen] = useState(false)
-    const [selectedName, setSelectedName] = useState(null)
+    const { token, onLogout } = useAuth();
+    const setSearchQuery = useSearchStore((state) => state.setSearchQuery);
+    const suggestions = useSuggestionsStore((state) => state.suggestions);
+    const [inputValue, setInputValue] = useState('');
+    const inputRef = useRef(null);
+    const [inputClientRect, setInputClientRect] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [selectedName, setSelectedName] = useState(null);
 
     const listClickOutsideCallback = useCallback((e) => {
         if (e.target.id !== 'search-field') {
-            setOpen(false)
-            setSelectedName(null)
+            setOpen(false);
+            setSelectedName(null);
         }
-    }, [])
-    const listRef = useClickOutside(listClickOutsideCallback)
+    }, []);
+    const listRef = useClickOutside(listClickOutsideCallback);
 
-    const enterKeyPressed = useCallback(
-        (e) => {
-            console.log('enter pressed')
-            console.log('selectedName', selectedName)
-            console.log('suggestions.length', suggestions.length)
-            console.log('open', open)
-            if (open && suggestions.length && selectedName) {
-                setInputValue(selectedName)
-                setSearchQuery(selectedName)
-                inputRef.current.blur()
-                setOpen(false)
+    const enterKeyPressed = useCallback(() => {
+        if (open && suggestions.length && selectedName) {
+            setInputValue(selectedName);
+            setSearchQuery(selectedName);
+            inputRef.current.blur();
+            setOpen(false);
+        }
+    }, [open, suggestions.length, selectedName]);
+    const downKeyPressed = useCallback(() => {
+        if (open && suggestions.length) {
+            let index = 1;
+
+            if (selectedName !== null) {
+                index = suggestions.indexOf(selectedName);
+                index++;
             }
-        },
-        [open, suggestions.length, selectedName]
-    )
-    const downKeyPressed = useCallback(
-        (e) => {
-            if (open && suggestions.length) {
-                let index = 1
 
-                if (selectedName !== null) {
-                    index = suggestions.indexOf(selectedName)
-                    index++
-                }
+            if (index < suggestions.length && index >= 0)
+                setSelectedName(suggestions[index]);
+        }
+    }, [open, suggestions, selectedName]);
+    const upKeyPressed = useCallback(() => {
+        if (open && suggestions.length) {
+            let index = 0;
 
-                if (index < suggestions.length && index >= 0)
-                    setSelectedName(suggestions[index])
+            if (selectedName !== null) {
+                index = suggestions.indexOf(selectedName);
+                index--;
             }
-        },
-        [open, suggestions, selectedName]
-    )
-    const upKeyPressed = useCallback(
-        (e) => {
-            if (open && suggestions.length) {
-                let index = 0
 
-                if (selectedName !== null) {
-                    index = suggestions.indexOf(selectedName)
-                    index--
-                }
+            if (index < suggestions.length && index >= 0)
+                setSelectedName(suggestions[index]);
+        }
+    }, [open, suggestions.length, selectedName]);
 
-                if (index < suggestions.length && index >= 0)
-                    setSelectedName(suggestions[index])
-            }
-        },
-        [open, suggestions.length, selectedName]
-    )
+    const escapeKeyPressed = useCallback(() => {
+        if (open && suggestions.length) {
+            setInputValue('');
+            setSelectedName(null);
+            setSearchQuery('');
+            setOpen(false);
+            inputRef.current.blur();
+        }
+    }, [open, suggestions.length]);
 
-    const escapeKeyPressed = useCallback(
-        (e) => {
-            if (open && suggestions.length) {
-                setInputValue('')
-                setSelectedName(null)
-                setSearchQuery('')
-                setOpen(false)
-                inputRef.current.blur()
-            }
-        },
-        [open, suggestions.length]
-    )
-    useKeyPressed('Enter', enterKeyPressed)
-    useKeyPressed('ArrowDown', downKeyPressed)
-    useKeyPressed('ArrowUp', upKeyPressed)
-    useKeyPressed('Escape', escapeKeyPressed)
+    useKeyPressed('Enter', enterKeyPressed);
+    useKeyPressed('ArrowDown', downKeyPressed);
+    useKeyPressed('ArrowUp', upKeyPressed);
+    useKeyPressed('Escape', escapeKeyPressed);
 
     const handleListClick = (e) => {
-        setInputValue(e.target.innerText)
-        setSearchQuery(e.target.innerText)
-        setOpen(false)
-        setSelectedName(null)
-    }
+        setInputValue(e.target.innerText);
+        setSearchQuery(e.target.innerText);
+        setOpen(false);
+        setSelectedName(null);
+    };
 
     useEffect(() => {
         if (suggestions.length && selectedName === null)
-            setSelectedName(suggestions[0])
-        if (!suggestions.length) setSelectedName(null)
-        const element = inputRef.current
+            setSelectedName(suggestions[0]);
+        if (!suggestions.length) setSelectedName(null);
+        const element = inputRef.current;
         if (element) {
-            const boundingClientRect = element.getBoundingClientRect()
+            const boundingClientRect = element.getBoundingClientRect();
             const widthWithoutBorder =
                 boundingClientRect.width -
                 parseInt(
@@ -119,16 +104,12 @@ const NavBar = () => {
                         .getComputedStyle(element)
                         .getPropertyValue('border-width')
                 ) *
-                    2
+                    2;
 
-            boundingClientRect.width = widthWithoutBorder
-            setInputClientRect(boundingClientRect)
+            boundingClientRect.width = widthWithoutBorder;
+            setInputClientRect(boundingClientRect);
         }
-    }, [suggestions])
-
-    console.log('suggestions.length', suggestions.length)
-    console.log('inputClientRect', inputClientRect)
-    console.log('open', open)
+    }, [suggestions]);
 
     return (
         <div className={styles.container}>
@@ -148,24 +129,24 @@ const NavBar = () => {
                             value={inputValue}
                             placeholder="Search For Teams or People"
                             onChange={(event) => {
-                                setInputValue(event.target.value)
+                                setInputValue(event.target.value);
                                 if (event.target.value.length < 3) {
-                                    setSearchQuery('')
-                                    setSelectedName(null)
+                                    setSearchQuery('');
+                                    setSelectedName(null);
                                 } else {
-                                    setSearchQuery(event.target.value)
+                                    setSearchQuery(event.target.value);
                                     if (suggestions.length > 0)
-                                        setSelectedName(suggestions[0])
+                                        setSelectedName(suggestions[0]);
                                 }
                             }}
                             onFocus={() => {
-                                setOpen(true)
+                                setOpen(true);
                             }}
-                            onBlur={(e) => {
+                            onBlur={() => {
                                 if (selectedName) {
-                                    setInputValue(selectedName)
-                                    setSearchQuery(selectedName)
-                                    setOpen(false)
+                                    setInputValue(selectedName);
+                                    setSearchQuery(selectedName);
+                                    setOpen(false);
                                 }
                             }}
                         />
@@ -173,7 +154,7 @@ const NavBar = () => {
                             <ul
                                 style={{
                                     top: inputClientRect.bottom,
-                                    width: inputClientRect.width,
+                                    width: inputClientRect.width
                                 }}
                                 ref={listRef}
                             >
@@ -201,7 +182,7 @@ const NavBar = () => {
                 ) : null}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default memo(NavBar)
+export default memo(NavBar);

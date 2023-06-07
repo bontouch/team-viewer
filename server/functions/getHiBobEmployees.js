@@ -13,7 +13,7 @@ const getHiBobEmployees = async () => {
         );
         return response.data.employees;
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 };
 
