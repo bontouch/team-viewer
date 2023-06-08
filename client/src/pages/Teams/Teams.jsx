@@ -32,18 +32,20 @@ const Teams = () => {
                 teamKey.toLowerCase().includes(searchQuery.toLowerCase())
             ),
             ...teamKeysSorted
-                .map(
-                    (teamKey) =>
-                        teams[teamKey].find((employee) =>
+                .map((teamKey) =>
+                    teams[teamKey]
+                        .filter((employee) =>
                             employee.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-                        )?.fullName
+                        )
+                        .filter((element) => element !== undefined)
+                        .map((employee) => employee.fullName)
                 )
-                .filter((element) => element !== undefined)
+                .flat()
                 .reduce((curr, next) => {
                     if (!(curr.indexOf(next) >= 0)) curr.push(next);
                     return curr;
                 }, [])
-        ];
+        ].sort();
     }, [searchQuery, teamKeysSorted, teams]);
 
     useEffect(() => {

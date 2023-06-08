@@ -1,17 +1,19 @@
-const getHiBobEmployees = require('./getHiBobEmployees');
+const getHiBobEmployees = require("./getHiBobEmployees");
 
 const groupEmployeesByProductTeam = (array) => {
   return array.reduce((acc, curr) => {
-    if (curr.work.customColumns['Product Team'] === '')
-      curr.work.customColumns['Product Team'] = 'Thesis';
-    const productTeams = curr.work.customColumns['Product Team'].split(',');
+    if (curr.work.customColumns["Product Team"] === "")
+      curr.work.customColumns["Product Team"] = "Other";
+    const productTeams = curr.work.customColumns["Product Team"].split(",");
     productTeams.forEach((productTeam) => {
       const employee = {
         fullName: curr.fullName,
         department: curr.work.department,
-        id: curr.id
+        id: curr.id,
       };
-      productTeam in acc ? acc[productTeam].push(employee) : (acc[productTeam] = [employee]);
+      productTeam in acc
+        ? acc[productTeam].push(employee)
+        : (acc[productTeam] = [employee]);
     });
     return acc;
   }, {});

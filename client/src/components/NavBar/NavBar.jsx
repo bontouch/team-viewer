@@ -103,6 +103,8 @@ const NavBar = () => {
         }
     }, [suggestions]);
 
+    //console.log(suggestions);
+
     return (
         <div className={styles.container}>
             <div className={styles['logo-wrapper']}>
@@ -145,8 +147,7 @@ const NavBar = () => {
                                     top: inputClientRect.bottom,
                                     width: inputClientRect.width
                                 }}
-                                ref={listRef}
-                            >
+                                ref={listRef}>
                                 {suggestions.map((suggestion, index) => (
                                     <li
                                         key={suggestion}
@@ -156,8 +157,7 @@ const NavBar = () => {
                                             (index === 0 && selectedName === null)
                                                 ? styles.selected
                                                 : null
-                                        }
-                                    >
+                                        }>
                                         {suggestion}
                                     </li>
                                 ))}
