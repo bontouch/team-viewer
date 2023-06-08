@@ -87,8 +87,9 @@ const NavBar = () => {
     const handleListClick = (e) => {
         setInputValue(e.target.innerText);
         setSearchQuery(e.target.innerText);
+        setSelectedName(e.target.innerText);
+        setSelected(e.target.innerText);
         setOpen(false);
-        setSelectedName(null);
     };
 
     useEffect(() => {
