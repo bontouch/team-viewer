@@ -23,9 +23,7 @@ const Team = ({ teamName, employees }) => {
         () =>
             employees.reduce((acc, curr) => {
                 const department = curr.department;
-                department in acc
-                    ? acc[department].push(curr)
-                    : (acc[department] = [curr]);
+                department in acc ? acc[department].push(curr) : (acc[department] = [curr]);
                 return acc;
             }, {}),
         [employees]
@@ -35,17 +33,11 @@ const Team = ({ teamName, employees }) => {
             ...departmentsByWeight,
             ...employees
                 .map((employee) => employee.department)
-                .filter(
-                    (department) => !departmentsByWeight.includes(department)
-                )
+                .filter((department) => !departmentsByWeight.includes(department))
                 .sort((departmentA, departmentB) =>
-                    departmentA
-                        .toLowerCase()
-                        .localeCompare(departmentB.toLowerCase())
+                    departmentA.toLowerCase().localeCompare(departmentB.toLowerCase())
                 )
-                .filter(
-                    (element, index, array) => array.indexOf(element) === index
-                )
+                .filter((element, index, array) => array.indexOf(element) === index)
         ],
         [employees]
     );
@@ -53,17 +45,13 @@ const Team = ({ teamName, employees }) => {
         <div className={styles.container}>
             <div className={styles.border}>
                 <h2 className={styles.title}>
-                    {teamName}{' '}
+                    {teamName}
                     {Object.keys(employeesByDepartment).length > 1 ? (
                         <button
                             className={styles.split}
-                            onClick={() =>
-                                setSplitByDepartment(!splitByDepartment)
-                            }
+                            onClick={() => setSplitByDepartment(!splitByDepartment)}
                         >
-                            {splitByDepartment
-                                ? 'hide departments'
-                                : 'show departments'}
+                            {splitByDepartment ? 'hide departments' : 'show departments'}
                         </button>
                     ) : null}
                 </h2>
@@ -72,37 +60,18 @@ const Team = ({ teamName, employees }) => {
                         if (!employeesByDepartment[departmentKey]) return null;
                         return (
                             <>
-                                <h3 className={styles.department}>
-                                    {departmentKey}
-                                </h3>
-                                <ul
-                                    className={
-                                        styles['employee-list-container']
-                                    }
-                                >
-                                    {employeesByDepartment[departmentKey].map(
-                                        (employee) => (
-                                            <li
-                                                className={
-                                                    styles['employee-item']
-                                                }
-                                                key={employee.id}
-                                            >
-                                                <EmployeeAvatarAndName
-                                                    fullName={employee.fullName}
-                                                    id={employee.id}
-                                                    url={
-                                                        isLoadingAvatars
-                                                            ? null
-                                                            : avatars[
-                                                                  employee.id
-                                                              ]
-                                                    }
-                                                    isLoading={isLoadingAvatars}
-                                                />
-                                            </li>
-                                        )
-                                    )}
+                                <h3 className={styles.department}>{departmentKey}</h3>
+                                <ul className={styles['employee-list-container']}>
+                                    {employeesByDepartment[departmentKey].map((employee) => (
+                                        <li className={styles['employee-item']} key={employee.id}>
+                                            <EmployeeAvatarAndName
+                                                fullName={employee.fullName}
+                                                id={employee.id}
+                                                url={isLoadingAvatars ? null : avatars[employee.id]}
+                                                isLoading={isLoadingAvatars}
+                                            />
+                                        </li>
+                                    ))}
                                 </ul>
                             </>
                         );
@@ -110,18 +79,11 @@ const Team = ({ teamName, employees }) => {
                 ) : (
                     <ul className={styles['employee-list-container']}>
                         {employees.map((employee) => (
-                            <li
-                                className={styles['employee-item']}
-                                key={employee.id}
-                            >
+                            <li className={styles['employee-item']} key={employee.id}>
                                 <EmployeeAvatarAndName
                                     fullName={employee.fullName}
                                     id={employee.id}
-                                    url={
-                                        isLoadingAvatars
-                                            ? null
-                                            : avatars[employee.id]
-                                    }
+                                    url={isLoadingAvatars ? null : avatars[employee.id]}
                                     isLoading={isLoadingAvatars}
                                 />
                             </li>

@@ -1,12 +1,11 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Teams from './pages/Teams/Teams'
-import AuthProvider from './auth/AuthProvider'
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
-//import jwt_decode from 'jwt-decode'
-import Login from './pages/Login/Login'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Teams from './pages/Teams/Teams';
+import AuthProvider from './auth/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Login from './pages/Login/Login';
 
-import styles from './App.module.scss'
-import NavBar from './components/NavBar/NavBar'
+import styles from './App.module.scss';
+import NavBar from './components/NavBar/NavBar';
 
 function App() {
     return (
@@ -28,7 +27,7 @@ function App() {
                 </div>
             </AuthProvider>
         </BrowserRouter>
-    )
+    );
 }
 
-export default App
+export default App;

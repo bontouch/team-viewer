@@ -50,8 +50,7 @@ const NavBar = () => {
                 index++;
             }
 
-            if (index < suggestions.length && index >= 0)
-                setSelectedName(suggestions[index]);
+            if (index < suggestions.length && index >= 0) setSelectedName(suggestions[index]);
         }
     }, [open, suggestions, selectedName]);
     const upKeyPressed = useCallback(() => {
@@ -63,8 +62,7 @@ const NavBar = () => {
                 index--;
             }
 
-            if (index < suggestions.length && index >= 0)
-                setSelectedName(suggestions[index]);
+            if (index < suggestions.length && index >= 0) setSelectedName(suggestions[index]);
         }
     }, [open, suggestions.length, selectedName]);
 
@@ -91,20 +89,14 @@ const NavBar = () => {
     };
 
     useEffect(() => {
-        if (suggestions.length && selectedName === null)
-            setSelectedName(suggestions[0]);
+        if (suggestions.length && selectedName === null) setSelectedName(suggestions[0]);
         if (!suggestions.length) setSelectedName(null);
         const element = inputRef.current;
         if (element) {
             const boundingClientRect = element.getBoundingClientRect();
             const widthWithoutBorder =
                 boundingClientRect.width -
-                parseInt(
-                    window
-                        .getComputedStyle(element)
-                        .getPropertyValue('border-width')
-                ) *
-                    2;
+                parseInt(window.getComputedStyle(element).getPropertyValue('border-width')) * 2;
 
             boundingClientRect.width = widthWithoutBorder;
             setInputClientRect(boundingClientRect);
@@ -116,9 +108,7 @@ const NavBar = () => {
             <div className={styles['logo-wrapper']}>
                 <img src={logo} className={styles.logo} alt="logo" />
             </div>
-            {!token ? (
-                <h1 className={styles.title}>Bontouch Team Viewer</h1>
-            ) : null}
+            {!token ? <h1 className={styles.title}>Bontouch Team Viewer</h1> : null}
             <div className={styles['input-wrapper']}>
                 {token ? (
                     <>
@@ -135,8 +125,7 @@ const NavBar = () => {
                                     setSelectedName(null);
                                 } else {
                                     setSearchQuery(event.target.value);
-                                    if (suggestions.length > 0)
-                                        setSelectedName(suggestions[0]);
+                                    if (suggestions.length > 0) setSelectedName(suggestions[0]);
                                 }
                             }}
                             onFocus={() => {
@@ -164,8 +153,7 @@ const NavBar = () => {
                                         onClick={handleListClick}
                                         className={
                                             selectedName === suggestion ||
-                                            (index === 0 &&
-                                                selectedName === null)
+                                            (index === 0 && selectedName === null)
                                                 ? styles.selected
                                                 : null
                                         }

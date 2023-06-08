@@ -6,6 +6,8 @@ import Team from '../../components/Team/Team';
 import { useSearchStore } from '../../components/NavBar/NavBar';
 import useAvatars from '../../helpers/useAvatars';
 import create from 'zustand';
+import axios from 'axios';
+import { getTokenFromLocalStorage } from '../../auth/AuthProvider';
 
 export const useSuggestionsStore = create((set) => ({
     suggestions: [],
@@ -13,6 +15,7 @@ export const useSuggestionsStore = create((set) => ({
 }));
 
 const Teams = () => {
+    axios.defaults.headers.common['Authorization'] = getTokenFromLocalStorage();
     const { data: teams, isLoading } = useTeams();
     useAvatars();
     const searchQuery = useSearchStore((state) => state.searchQuery);
@@ -32,9 +35,7 @@ const Teams = () => {
                 .map(
                     (teamKey) =>
                         teams[teamKey].find((employee) =>
-                            employee.fullName
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
+                            employee.fullName.toLowerCase().includes(searchQuery.toLowerCase())
                         )?.fullName
                 )
                 .filter((element) => element !== undefined)
@@ -70,22 +71,15 @@ const Teams = () => {
                     searchQuery === '' ||
                     teamKey.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     teamEmployees.find((employee) =>
-                        employee.fullName
-                            .toLowerCase()
-                            .includes(searchQuery.toLowerCase())
+                        employee.fullName.toLowerCase().includes(searchQuery.toLowerCase())
                     );
                 return (
                     <span
                         key={teamKey}
                         style={{
                             display: `${show ? 'block' : 'none'}`
-                        }}
-                    >
-                        <Team
-                            key={teamKey}
-                            teamName={teamKey}
-                            employees={teams[teamKey]}
-                        />
+                        }}>
+                        <Team key={teamKey} teamName={teamKey} employees={teams[teamKey]} />
                     </span>
                 );
             })}

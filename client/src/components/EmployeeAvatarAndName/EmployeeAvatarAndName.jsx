@@ -42,12 +42,7 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
 
     return (
         <div onMouseEnter={handleMouseEnter}>
-            <Avatar
-                isLoading={isLoading}
-                url={url}
-                fullName={fullName}
-                className={className}
-            />
+            <Avatar isLoading={isLoading} url={url} fullName={fullName} className={className} />
         </div>
     );
 };

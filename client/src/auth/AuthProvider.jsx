@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const AuthContext = createContext(null);
 
-const getTokenFromLocalStorage = () => {
+export const getTokenFromLocalStorage = () => {
     return localStorage.getItem('bonTouchHiBobLoginToken');
 };
 
@@ -26,7 +26,8 @@ const AuthProvider = ({ children }) => {
     const value = {
         token,
         onLogin: handleLogin,
-        onLogout: handleLogout
+        onLogout: handleLogout,
+        setToken
     };
 
     useEffect(() => {
@@ -41,9 +42,7 @@ const AuthProvider = ({ children }) => {
         navigate(origin);
     }, [token, location.state?.from?.pathname, navigate]);
 
-    return (
-        <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
