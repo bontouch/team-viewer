@@ -12,12 +12,15 @@ import useKeyPressed from '../../helpers/useKeyPressed';
 
 export const useSearchStore = create((set) => ({
     searchQuery: '',
-    setSearchQuery: (query) => set(() => ({ searchQuery: query }))
+    selected: null,
+    setSearchQuery: (query) => set(() => ({ searchQuery: query })),
+    setSelected: (selected) => set(() => ({ selected }))
 }));
 
 const NavBar = () => {
     const { token, onLogout } = useAuth();
     const setSearchQuery = useSearchStore((state) => state.setSearchQuery);
+    const setSelected = useSearchStore((state) => state.setSelected);
     const suggestions = useSuggestionsStore((state) => state.suggestions);
     const [inputValue, setInputValue] = useState('');
     const inputRef = useRef(null);
@@ -25,20 +28,30 @@ const NavBar = () => {
     const [open, setOpen] = useState(false);
     const [selectedName, setSelectedName] = useState(null);
 
-    const listClickOutsideCallback = useCallback((e) => {
-        if (e.target.id !== 'search-field') {
-            setOpen(false);
-            setSelectedName(null);
-        }
-    }, []);
+    const listClickOutsideCallback = useCallback(
+        (e) => {
+            if (e.target.id !== 'search-field') {
+                setOpen(false);
+                console.log(inputValue);
+                console.log(selectedName);
+                if (inputValue === '' || inputValue !== selectedName || suggestions.length === 0) {
+                    setSelectedName(null);
+                    setInputValue('');
+                    setSelected(null);
+                }
+            }
+        },
+        [inputValue, selectedName, suggestions.length]
+    );
     const listRef = useClickOutside(listClickOutsideCallback);
 
     const enterKeyPressed = useCallback(() => {
         if (open && suggestions.length && selectedName) {
             setInputValue(selectedName);
             setSearchQuery(selectedName);
-            inputRef.current.blur();
             setOpen(false);
+            setSelected(selectedName);
+            inputRef.current.blur();
         }
     }, [open, suggestions.length, selectedName]);
     const downKeyPressed = useCallback(() => {
@@ -66,20 +79,10 @@ const NavBar = () => {
         }
     }, [open, suggestions.length, selectedName]);
 
-    const escapeKeyPressed = useCallback(() => {
-        if (open && suggestions.length) {
-            setInputValue('');
-            setSelectedName(null);
-            setSearchQuery('');
-            setOpen(false);
-            inputRef.current.blur();
-        }
-    }, [open, suggestions.length]);
-
     useKeyPressed('Enter', enterKeyPressed);
     useKeyPressed('ArrowDown', downKeyPressed);
     useKeyPressed('ArrowUp', upKeyPressed);
-    useKeyPressed('Escape', escapeKeyPressed);
+    useKeyPressed('Tab', enterKeyPressed);
 
     const handleListClick = (e) => {
         setInputValue(e.target.innerText);
@@ -103,8 +106,6 @@ const NavBar = () => {
         }
     }, [suggestions]);
 
-    //console.log(suggestions);
-
     return (
         <div className={styles.container}>
             <div className={styles['logo-wrapper']}>
@@ -116,6 +117,7 @@ const NavBar = () => {
                     <>
                         <input
                             id="search-field"
+                            autoComplete="off"
                             ref={inputRef}
                             className={styles.input}
                             value={inputValue}
@@ -129,15 +131,16 @@ const NavBar = () => {
                                     setSearchQuery(event.target.value);
                                     if (suggestions.length > 0) setSelectedName(suggestions[0]);
                                 }
+                                setSelected(null);
                             }}
                             onFocus={() => {
                                 setOpen(true);
                             }}
                             onBlur={() => {
-                                if (selectedName) {
-                                    setInputValue(selectedName);
-                                    setSearchQuery(selectedName);
-                                    setOpen(false);
+                                if (suggestions.length === 0) {
+                                    setSelected(null);
+                                    setInputValue('');
+                                    setSearchQuery('');
                                 }
                             }}
                         />
