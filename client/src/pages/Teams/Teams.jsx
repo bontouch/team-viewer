@@ -65,7 +65,18 @@ const Teams = () => {
     return (
         <div className={styles.teams}>
             {searchQuery.length >= 3 && suggestions.length === 0 ? (
-                <p>nothing to see here</p>
+                <h3
+                    style={{
+                        fontSize: 'xx-large',
+                        margin: '0 auto',
+                        width: 'auto',
+                        position: 'absolute',
+                        left: '50%',
+                        top: '20rem',
+                        transform: 'translateX(-50%)'
+                    }}>
+                    No Search Results for <span style={{ color: '#8f8f8f' }}>{searchQuery}</span>
+                </h3>
             ) : null}
             {teamKeysSorted.map((teamKey) => {
                 const teamEmployees = teams[teamKey];
