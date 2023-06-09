@@ -9,7 +9,13 @@ const Avatar = memo(({ isLoading, url, fullName, className }) => {
     return (
         <>
             {isLoading ? (
-                <div style={{ width: '16rem', height: '16rem', position: 'relative' }}>
+                <div
+                    style={{
+                        width: '16rem',
+                        height: '16rem',
+                        position: 'relative',
+                        display: 'inline-block'
+                    }}>
                     <FontAwesomeIcon
                         icon={faUser}
                         fade
@@ -24,7 +30,13 @@ const Avatar = memo(({ isLoading, url, fullName, className }) => {
                     />
                 </div>
             ) : !url ? (
-                <div style={{ width: '16rem', height: '16rem', position: 'relative' }}>
+                <div
+                    style={{
+                        width: '16rem',
+                        height: '16rem',
+                        position: 'relative',
+                        display: 'inline-block'
+                    }}>
                     <FontAwesomeIcon
                         icon={faUser}
                         size="10x"
