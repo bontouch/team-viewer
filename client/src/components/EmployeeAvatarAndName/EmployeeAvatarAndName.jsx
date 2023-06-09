@@ -2,14 +2,41 @@ import styles from '../Team/Team.module.scss';
 import { useSearchStore } from '../NavBar/NavBar';
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useState } from 'react';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Avatar = memo(({ isLoading, url, fullName, className }) => {
     return (
         <>
             {isLoading ? (
-                <div className={styles.loading}>Loading</div>
+                <div style={{ width: '16rem', height: '16rem', position: 'relative' }}>
+                    <FontAwesomeIcon
+                        icon={faUser}
+                        fade
+                        size="10x"
+                        style={{
+                            color: '#37a3e6',
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate3d(-50%, -50%, 0)'
+                        }}
+                    />
+                </div>
             ) : !url ? (
-                <div className={styles.loading}>no image</div>
+                <div style={{ width: '16rem', height: '16rem', position: 'relative' }}>
+                    <FontAwesomeIcon
+                        icon={faUser}
+                        size="10x"
+                        style={{
+                            color: 'white',
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate3d(-50%, -50%, 0)'
+                        }}
+                    />
+                </div>
             ) : (
                 <img className={className} src={url} alt="employee avatar" />
             )}
