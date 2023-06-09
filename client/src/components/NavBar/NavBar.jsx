@@ -22,6 +22,7 @@ const NavBar = () => {
     const setSearchQuery = useSearchStore((state) => state.setSearchQuery);
     const setSelected = useSearchStore((state) => state.setSelected);
     const suggestions = useSuggestionsStore((state) => state.suggestions);
+    const setSuggestions = useSuggestionsStore((state) => state.setSuggestions);
     const [inputValue, setInputValue] = useState('');
     const inputRef = useRef(null);
     const [inputClientRect, setInputClientRect] = useState(null);
@@ -38,6 +39,7 @@ const NavBar = () => {
                     setSelectedName(null);
                     setInputValue('');
                     setSelected(null);
+                    setSuggestions([]);
                 }
             }
         },
@@ -93,8 +95,13 @@ const NavBar = () => {
     };
 
     useEffect(() => {
-        if (suggestions.length && selectedName === null) setSelectedName(suggestions[0]);
-        if (!suggestions.length) setSelectedName(null);
+        if (
+            (suggestions.length && selectedName === null) ||
+            !suggestions.length ||
+            suggestions[0] !== selectedName
+        )
+            setSelectedName(suggestions[0]);
+        //if (!suggestions.length) setSelectedName(null);
         const element = inputRef.current;
         if (element) {
             const boundingClientRect = element.getBoundingClientRect();
@@ -106,7 +113,7 @@ const NavBar = () => {
             setInputClientRect(boundingClientRect);
         }
     }, [suggestions]);
-
+    console.log(suggestions);
     return (
         <div className={styles.container}>
             <div className={styles['logo-wrapper']}>
