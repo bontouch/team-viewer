@@ -14,8 +14,18 @@ const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(() => getTokenFromLocalStorage());
 
     const handleLogin = async (signInToken) => {
-        localStorage.setItem('bonTouchHiBobLoginToken', signInToken);
-        setToken(signInToken);
+        let response;
+        try {
+            response = await axios.post(`/token`, { signInToken });
+            const bonTouchToken = response?.data?.token;
+            if (bonTouchToken) {
+                localStorage.setItem('bonTouchHiBobLoginToken', `Bearer ${bonTouchToken}`);
+                setToken(`Bearer ${bonTouchToken}`);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        return response.status;
     };
 
     const handleLogout = () => {

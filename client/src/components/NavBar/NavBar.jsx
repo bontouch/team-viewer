@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import create from 'zustand';
 
 import { useAuth } from '../../helpers/useAuth';
@@ -33,8 +33,6 @@ const NavBar = () => {
         (e) => {
             if (e.target.id !== 'search-field') {
                 setOpen(false);
-                console.log(inputValue);
-                console.log(selectedName);
                 if (inputValue === '' || inputValue !== selectedName || suggestions.length === 0) {
                     setSelectedName(null);
                     setInputValue('');
@@ -113,7 +111,7 @@ const NavBar = () => {
             setInputClientRect(boundingClientRect);
         }
     }, [suggestions]);
-    console.log(suggestions);
+
     return (
         <div className={styles.container}>
             <div className={styles['logo-wrapper']}>
@@ -184,4 +182,4 @@ const NavBar = () => {
     );
 };
 
-export default memo(NavBar);
+export default NavBar;

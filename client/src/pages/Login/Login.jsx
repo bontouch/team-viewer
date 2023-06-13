@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../helpers/useAuth';
+import styles from '../Teams/Teams.module.scss';
+import Loader from '../../components/Loader/Loader';
 
 const loadGoogleScript = () =>
     new Promise((resolve, reject) => {
@@ -15,12 +17,15 @@ const loadGoogleScript = () =>
 const Login = () => {
     const { onLogin } = useAuth();
     const [scriptLoaded, setScriptLoaded] = useState(false);
-    console.log('scriptLoaded', scriptLoaded);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         if (!scriptLoaded) {
             loadGoogleScript().then(() => {
-                const handleCallbackResponse = (response) => {
-                    onLogin(response.credential);
+                const handleCallbackResponse = async (response) => {
+                    setIsLoading(true);
+                    const status = await onLogin(response.credential);
+                    if (status !== 200) setIsLoading(false);
                 };
                 const handleError = (response) => {
                     console.error(response);
@@ -49,6 +54,15 @@ const Login = () => {
             setScriptLoaded(true);
         }
     }, [onLogin]);
+    if (isLoading) {
+        return (
+            <div className={styles.load}>
+                <span>
+                    <Loader />
+                </span>
+            </div>
+        );
+    }
 
     return (
         <div

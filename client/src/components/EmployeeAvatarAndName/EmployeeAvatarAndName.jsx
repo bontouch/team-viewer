@@ -58,9 +58,7 @@ const Avatar = memo(({ isLoading, url, fullName, className }) => {
 });
 
 const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
-    //const searchQuery = useSearchStore((state) => state.searchQuery);
     const selected = useSearchStore((state) => state.selected);
-    console.log('selected', selected);
     const [className, setClassName] = useState('');
 
     const handleMouseEnter = useCallback(() => {
@@ -68,8 +66,6 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
     }, []);
 
     useEffect(() => {
-        //setHovered(false)
-        console.log(selected);
         setClassName(
             classNames([
                 styles.avatar,
@@ -79,14 +75,6 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
                     ? styles.highlight
                     : ''
             ])
-            // classNames([
-            //     styles.avatar,
-            //     searchQuery !== '' &&
-            //     searchQuery.length >= 3 &&
-            //     fullName.toLowerCase().includes(searchQuery.toLowerCase())
-            //         ? styles.highlight
-            //         : ''
-            // ])
         );
     }, [selected, fullName]);
 
