@@ -1,5 +1,4 @@
 const express = require("express");
-const jsonwebtoken = require("jsonwebtoken");
 const { expressjwt } = require("express-jwt");
 const functions = require("firebase-functions");
 require("firebase-functions/logger/compat");
