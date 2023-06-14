@@ -16,7 +16,12 @@ const AuthProvider = ({ children }) => {
     const handleLogin = async (signInToken) => {
         let response;
         try {
-            response = await axios.post(`/token`, { signInToken });
+            response = await axios.post(
+                `${
+                    process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_DOMAIN : ''
+                }/token`,
+                { signInToken }
+            );
             const bonTouchToken = response?.data?.token;
             if (bonTouchToken) {
                 localStorage.setItem('bonTouchHiBobLoginToken', `Bearer ${bonTouchToken}`);
