@@ -1,13 +1,16 @@
 const express = require("express");
 const { expressjwt } = require("express-jwt");
 const functions = require("firebase-functions");
-require("firebase-functions/logger/compat");
+//logger/compat is for console log
+//require("firebase-functions/logger/compat");
 const resizeAndStoreImagesFromHiBob = require("./compressAndUpload/resizeAndStoreImagesFromHiBob");
 const getTeams = require("./getTeams");
 const authWithGoogle = require("./AuthWithGoogle");
 const applyCorsMiddleWare = require("./applyCorsMiddleWare");
 const getAvatars = require("./getAvatars");
 const getMaxAge = require("./getMaxAge");
+const shouldFetchAvatars = require("./shouldFetchAvatars");
+const shouldFetchTeams = require("./shouldFetchTeams");
 
 const app = express();
 
@@ -33,11 +36,16 @@ app.post("/token", async (req, res) => {
 });
 
 app.get("/avatars", async (req, res) => {
-  if (!app.settings.avatars) {
+  if (
+    !app.settings.avatars ||
+    shouldFetchAvatars(app.settings.avatarsLastFetchedDate)
+  ) {
     try {
       const avatars = await getAvatars(app)();
       app.set("avatars", avatars);
-
+      const currDate = new Date();
+      currDate.setHours(currDate.getUTCHours() + 2);
+      app.set("avatarsLastFetchedDate", currDate);
       res
         .set("Cache-control", `max-age=${getMaxAge()}`)
         .status(200)
@@ -54,10 +62,16 @@ app.get("/avatars", async (req, res) => {
 });
 
 app.get("/teams", async (req, res) => {
-  if (!app.settings.teams) {
+  if (
+    !app.settings.teams ||
+    shouldFetchTeams(app.settings.teamsLastFetchedDate)
+  ) {
     try {
       const teams = await getTeams();
       app.set("teams", teams);
+      const currDate = new Date();
+      currDate.setHours(currDate.getUTCHours() + 2);
+      app.set("teamsLastFetchedDate", currDate);
       res
         .set("Cache-control", `max-age=${getMaxAge()}`)
         .status(200)
@@ -89,12 +103,8 @@ exports.hibobBatchJob = functions
     memory: "4GB",
     secrets: ["HIBOB_API_KEY", "GOOGLE_AUTH_CLIENT_ID"],
   })
-  .pubsub.schedule("3 * * * *")
+  .pubsub.schedule("0 0 * * *")
   .timeZone("Europe/Stockholm")
   .onRun(async () => {
     await resizeAndStoreImagesFromHiBob();
-    const avatars = await getAvatars(app);
-    app.set("avatars", avatars);
-    const teams = await getTeams();
-    app.set("teams", teams);
   });
