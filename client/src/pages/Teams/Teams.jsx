@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useMemo } from 'react';
 import useTeams from '../../helpers/useTeams';
 import styles from './Teams.module.scss';

@@ -1,25 +1,26 @@
-import styles from '../Team/Team.module.scss';
 import { useSearchStore } from '../NavBar/NavBar';
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from '../Team/Team.module.scss';
 
-const Avatar = memo(({ isLoading, url, fullName, className }) => {
+const Avatar = memo(({ isLoading, url, fullName, className, role }) => {
     return (
         <>
             {isLoading ? (
                 <div
                     style={{
-                        width: '16rem',
-                        height: '16rem',
+                        width: '14rem',
+                        height: '14rem',
                         position: 'relative',
-                        display: 'inline-block'
+                        display: 'inline-block',
+                        marginBottom: '0.5rem'
                     }}>
                     <FontAwesomeIcon
                         icon={faUser}
                         fade
-                        size="10x"
+                        size="7x"
                         style={{
                             color: '#37a3e6',
                             position: 'absolute',
@@ -32,32 +33,34 @@ const Avatar = memo(({ isLoading, url, fullName, className }) => {
             ) : !url ? (
                 <div
                     style={{
-                        width: '16rem',
-                        height: '16rem',
+                        width: '14rem',
+                        height: '14rem',
                         position: 'relative',
                         display: 'inline-block'
                     }}>
                     <FontAwesomeIcon
                         icon={faUser}
-                        size="10x"
+                        size="7x"
                         style={{
                             color: 'white',
                             position: 'absolute',
                             left: '50%',
                             top: '50%',
-                            transform: 'translate3d(-50%, -50%, 0)'
+                            transform: 'translate3d(-50%, -50%, 0)',
+                            marginBottom: '0.5rem'
                         }}
                     />
                 </div>
             ) : (
-                <img className={className} src={url} alt="employee avatar" />
+                <img className={className} loading="lazy" src={url} alt="employee avatar" />
             )}
-            <span style={{ color: 'white' }}>{fullName}</span>
+            <p className={styles.name}>{fullName}</p>
+            <p className={styles.role}>{role}</p>
         </>
     );
 });
 
-const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
+const EmployeeAvatarAndName = ({ fullName, url, isLoading, role }) => {
     const selected = useSearchStore((state) => state.selected);
     const [className, setClassName] = useState('');
 
@@ -80,7 +83,13 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading }) => {
 
     return (
         <div onMouseEnter={handleMouseEnter}>
-            <Avatar isLoading={isLoading} url={url} fullName={fullName} className={className} />
+            <Avatar
+                isLoading={isLoading}
+                url={url}
+                fullName={fullName}
+                className={className}
+                role={role}
+            />
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { compareArrays } from '../../helpers/utils';
 import styles from './Team.module.scss';
 import EmployeeAvatarAndName from '../EmployeeAvatarAndName/EmployeeAvatarAndName';
 import useAvatars from '../../helpers/useAvatars';
+import Slider from '../Slider/Slider';
 
 const departmentsByWeight = [
     'Product Leads',
@@ -19,6 +20,7 @@ const departmentsByWeight = [
 const Team = ({ teamName, employees }) => {
     const { data: avatars, isLoading: isLoadingAvatars } = useAvatars();
     const [splitByDepartment, setSplitByDepartment] = useState(false);
+
     const employeesByDepartment = useMemo(
         () =>
             employees.reduce((acc, curr) => {
@@ -41,55 +43,43 @@ const Team = ({ teamName, employees }) => {
         ],
         [employees]
     );
+
+    const employeesArrayOrderedByDepartmentWeight = useMemo(() => {
+        console.log('use memo');
+        return departmentKeysOrdered
+            .map((departmentKey) => {
+                if (!employeesByDepartment[departmentKey]) return undefined;
+                return employeesByDepartment[departmentKey].map((employee) => employee);
+            })
+            .filter(Boolean)
+            .flat();
+    }, [employees]);
+
+    const employeeList = splitByDepartment ? employeesArrayOrderedByDepartmentWeight : employees;
+
     return (
         <div className={styles.container}>
             <div className={styles.border}>
-                <h2 className={styles.title}>
-                    {teamName}
+                <div className={styles.wrapper}>
+                    <h2 className={styles.title}>{teamName}</h2>
                     {Object.keys(employeesByDepartment).length > 1 ? (
-                        <button
-                            className={styles.split}
-                            onClick={() => setSplitByDepartment(!splitByDepartment)}
-                        >
-                            {splitByDepartment ? 'hide departments' : 'show departments'}
-                        </button>
+                        <Slider callback={() => setSplitByDepartment(!splitByDepartment)} />
                     ) : null}
-                </h2>
-                {splitByDepartment ? (
-                    departmentKeysOrdered.map((departmentKey) => {
-                        if (!employeesByDepartment[departmentKey]) return null;
-                        return (
-                            <>
-                                <h3 className={styles.department}>{departmentKey}</h3>
-                                <ul className={styles['employee-list-container']}>
-                                    {employeesByDepartment[departmentKey].map((employee) => (
-                                        <li className={styles['employee-item']} key={employee.id}>
-                                            <EmployeeAvatarAndName
-                                                fullName={employee.fullName}
-                                                id={employee.id}
-                                                url={isLoadingAvatars ? null : avatars[employee.id]}
-                                                isLoading={isLoadingAvatars}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                            </>
-                        );
-                    })
-                ) : (
-                    <ul className={styles['employee-list-container']}>
-                        {employees.map((employee) => (
-                            <li className={styles['employee-item']} key={employee.id}>
-                                <EmployeeAvatarAndName
-                                    fullName={employee.fullName}
-                                    id={employee.id}
-                                    url={isLoadingAvatars ? null : avatars[employee.id]}
-                                    isLoading={isLoadingAvatars}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                </div>
+
+                <ul className={styles['employee-list-container']}>
+                    {employeeList.map((employee) => (
+                        <li className={styles['employee-item']} key={employee.id}>
+                            <EmployeeAvatarAndName
+                                fullName={employee.fullName}
+                                id={employee.id}
+                                url={isLoadingAvatars ? null : avatars[employee.id]}
+                                isLoading={isLoadingAvatars}
+                                role={employee.department}
+                            />
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );

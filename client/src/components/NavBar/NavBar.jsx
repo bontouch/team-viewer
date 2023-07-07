@@ -3,12 +3,12 @@ import create from 'zustand';
 
 import { useAuth } from '../../helpers/useAuth';
 
-import logo from '../../images/BTLogo.png';
-
 import styles from './NavBar.module.scss';
 import { useSuggestionsStore } from '../../pages/Teams/Teams';
 import useClickOutside from '../../helpers/useClickOutside';
 import useKeyPressed from '../../helpers/useKeyPressed';
+import { ReactComponent as SearchLogo } from '../../images/search.svg';
+import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
 
 export const useSearchStore = create((set) => ({
     searchQuery: '',
@@ -34,6 +34,7 @@ const NavBar = () => {
             if (e.target.id !== 'search-field') {
                 setOpen(false);
                 if (inputValue === '' || inputValue !== selectedName || suggestions.length === 0) {
+                    console.log('in here from listClickOutsideCallback');
                     setSelectedName(null);
                     setInputValue('');
                     setSelected(null);
@@ -51,8 +52,8 @@ const NavBar = () => {
             setSearchQuery(selectedName);
             setOpen(false);
             setSelected(selectedName);
-            inputRef.current.blur();
         }
+        inputRef.current.blur();
     }, [open, suggestions.length, selectedName]);
     const downKeyPressed = useCallback(() => {
         if (open && suggestions.length) {
@@ -78,11 +79,22 @@ const NavBar = () => {
             if (index < suggestions.length && index >= 0) setSelectedName(suggestions[index]);
         }
     }, [open, suggestions.length, selectedName]);
+    const escapeKeyPressed = useCallback(() => {
+        setOpen(false);
+        if (inputValue === '' || inputValue !== selectedName || suggestions.length === 0) {
+            setSelectedName(null);
+            setInputValue('');
+            setSelected(null);
+            setSuggestions([]);
+        }
+        setTimeout(() => inputRef.current.blur(), 100);
+    }, [inputValue, selectedName, suggestions.length]);
 
     useKeyPressed('Enter', enterKeyPressed);
     useKeyPressed('ArrowDown', downKeyPressed);
     useKeyPressed('ArrowUp', upKeyPressed);
     useKeyPressed('Tab', enterKeyPressed);
+    useKeyPressed('Escape', escapeKeyPressed);
 
     const handleListClick = (e) => {
         setInputValue(e.target.innerText);
@@ -111,45 +123,53 @@ const NavBar = () => {
             setInputClientRect(boundingClientRect);
         }
     }, [suggestions]);
-
+    console.log(inputClientRect);
     return (
         <div className={styles.container}>
-            <div className={styles['logo-wrapper']}>
-                <img src={logo} className={styles.logo} alt="logo" />
-            </div>
+            {/*<div className={styles['logo-wrapper']}>*/}
+            {/*<BTLogo />*/}
+            {/*<img src={logo} className={styles.logo} alt="logo" />*/}
+            {/*</div>*/}
             {!token ? <h1 className={styles.title}>Bontouch Team Viewer</h1> : null}
-            <div className={styles['input-wrapper']}>
+            <div className={styles['content-wrapper']}>
                 {token ? (
                     <>
-                        <input
-                            id="search-field"
-                            autoComplete="off"
-                            ref={inputRef}
-                            className={styles.input}
-                            value={inputValue}
-                            placeholder="Search For Teams or People"
-                            onChange={(event) => {
-                                setInputValue(event.target.value);
-                                if (event.target.value.length < 3) {
-                                    setSearchQuery('');
-                                    setSelectedName(null);
-                                } else {
-                                    setSearchQuery(event.target.value);
-                                    if (suggestions.length > 0) setSelectedName(suggestions[0]);
-                                }
-                                setSelected(null);
-                            }}
-                            onFocus={() => {
-                                setOpen(true);
-                            }}
-                            onBlur={() => {
-                                if (suggestions.length === 0) {
+                        <BTLogo className={styles.logo} />
+                        <div className={styles['input-wrapper']}>
+                            <SearchLogo />
+                            <input
+                                id="search-field"
+                                autoComplete="off"
+                                ref={inputRef}
+                                className={styles.input}
+                                value={inputValue}
+                                placeholder="Search for teams or people..."
+                                onChange={(event) => {
+                                    setInputValue(event.target.value);
+                                    if (event.target.value.length < 3) {
+                                        setSearchQuery('');
+                                        setSelectedName(null);
+                                    } else {
+                                        setSearchQuery(event.target.value);
+                                        if (suggestions.length > 0) setSelectedName(suggestions[0]);
+                                    }
                                     setSelected(null);
-                                    setInputValue('');
-                                    setSearchQuery('');
-                                }
-                            }}
-                        />
+                                }}
+                                onFocus={() => {
+                                    setOpen(true);
+                                }}
+                                onBlur={() => {
+                                    console.log('outside onblur');
+                                    if (suggestions.length === 0) {
+                                        console.log('inside onblur');
+                                        setSelected(null);
+                                        setInputValue('');
+                                        setSearchQuery('');
+                                    }
+                                }}
+                            />
+                        </div>
+
                         {suggestions.length && inputClientRect && open ? (
                             <ul
                                 style={{

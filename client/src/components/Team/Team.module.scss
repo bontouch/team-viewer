@@ -1,20 +1,27 @@
 .container{
-  width: 80%;
+  //width: 80%;
   max-width: 120rem;
   position: relative;
   margin: 2rem auto 4rem;
 }
 
 .border{
-  border: 0.1rem solid rgb(57 163 230);
-  border-radius: 0.4rem;
+  border-radius: 2.4rem;
+  background: #F5F7FA;
+  padding: 2.4rem;
 }
 
 .title{
-  background: #37a3e6;
-  color: white;
-  padding: 1rem;
-  font-size: x-large;
+  color: black;
+  //padding: 1rem;
+  //font-size: x-large;
+  flex: 1;
+  font-size: 3.2rem;
+  font-weight: 400;
+  line-height: 3.8rem;
+  letter-spacing: 0;
+  text-align: left;
+
 }
 
 .department{
@@ -23,11 +30,19 @@
   color: #37a3e6;
 }
 
+.wrapper{
+  position: relative;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  //padding-right: 2.4rem;
+}
+
 .split{
   cursor: pointer;
   position: absolute;
-  right: 1rem;
-  color: white;
+  right: 2.4rem;
+  color: black;
   font-size: large;
   background-color: transparent;
   border-width: 0;
@@ -39,22 +54,30 @@
 }
 
 .employee-list-container{
-  padding: 0 1rem 1rem;
-  display: flex;
+  //display: flex;
   list-style-type: none;
-  margin: 0;
-  flex-flow: row wrap;
-  justify-content: flex-start;
+  //margin: 0;
+  //flex-flow: row wrap;
+  //justify-content: flex-start;
+
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 3.2rem;
+  place-content: center;
+  place-items: center;
+  max-width: 120rem;
+  margin: 0 auto;
+  //padding: 100px 20px;
 }
 
 .employee-item{
-  padding: 1rem;
-  background: #556aa7;
-  margin-top: 1rem;
+  padding: 1.2rem;
+  background: white;
   font-size: 1.4rem;
-  margin-right: 1rem;
-  width: 16rem;
-  border-radius: 0.2rem;
+  //margin: 1rem 2rem 1rem 0;
+  width: 14rem;
+  border-radius: 1.6rem;
   a{
     color: white;
     text-decoration: none;
@@ -63,11 +86,30 @@
 }
 
 .avatar{
-  width: 16rem;
-  height: 16rem;
-  border-radius: 0.2rem;
+  width: 14rem;
+  height: 14rem;
+  border-radius: 0.8rem;
   object-fit: cover;
   object-position: 50% 0;
+  margin-bottom: 0.5rem;
+}
+
+.name{
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.9rem;
+  letter-spacing: 0;
+  text-align: left;
+  margin-bottom: 0.3rem;
+}
+
+.role{
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.4rem;
+  letter-spacing: 0;
+  text-align: left;
+
 }
 
 .loading{
