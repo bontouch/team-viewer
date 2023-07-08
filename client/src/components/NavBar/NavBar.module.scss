@@ -1,105 +1,117 @@
-.container{
-  height: 10rem;
-  background-color: #4DB66B;
-  width: 100%;
-  top: 0;
-  position: fixed;
-  z-index: 1;
-}
-
-.content-wrapper{
-  width: calc(80% - 8rem);
-  max-width: 112rem;
-  position: relative;
-  margin: 0 auto;
-  height: 100%;
-  z-index: -1;
-  ul{
-    left: 9.4rem;
-    padding-top: 1rem;
-    margin-top: -1rem;
-    z-index: -1;
-    border-radius: 0.5rem;
-    border: 1px solid transparent;
-    overflow: hidden;
-    font-size: 1.6rem;
-    position: absolute;
-    background: white;
-    list-style: none;
-    li{
-      padding: 1rem;
-      &:hover, &.selected{
-        font-family: inherit;
-        background: #b4bfc7;
-        cursor: pointer;
-      }
+.container {
+    height: 10rem;
+    background-color: #4db66b;
+    width: 100%;
+    top: 0;
+    position: fixed;
+    z-index: 1;
+    .wrapper {
+        max-width: 120rem;
+        margin: 0 auto;
+        position: relative;
+        height: 100%;
     }
-  }
 }
 
-.title{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate3d(-50%, -50%, 0);
-}
-
-.logo{
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.input-wrapper{
-  left: 9.4rem;
-  position: absolute;
-  //width: 40rem;
-  top: 50%;
-  transform: translate3d(0, -50%, 0);
-  svg{
-    height: 2.4rem;
-    width: 2.4rem;
-    left: 1.6rem;
-    //background-color: red;
-    //padding: 4px;
-    position: absolute;
-    //box-sizing:border-box;
-    top:50%;
-    //left:2px;
+.content-wrapper {
+    position: relative;
+    //z-index: -1;
+    padding: 0 2.4rem;
+    display: flex;
+    top: 50%;
     transform: translateY(-50%);
-  }
+    ul {
+        left: 0;
+        padding-top: 1rem;
+        margin-top: -1rem;
+        z-index: -1;
+        border-radius: 0.5rem;
+        border: 1px solid transparent;
+        overflow: hidden;
+        font-size: 1.6rem;
+        position: absolute;
+        background: white;
+        list-style: none;
+        li {
+            padding: 1.4rem;
+            &:hover,
+            &.selected {
+                font-family: inherit;
+                background: #b4bfc7;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
-.input{
-  //position: absolute;
-  padding: 1.5rem 1.6rem 1.4rem 5.6rem; // probably top bottom 1.2rem and left right 1.6rem after icon placement
-  border-radius: 0.8rem;
-  border: 1px solid transparent;
-  font-size: 1.6rem;
-  width: 44.6rem;
-  //top: 50%;
-  //transform: translate3d(0, -50%, 0);
-  font-family: inherit;
-  &::placeholder{
-    font-weight: 300;
+.title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.logo {
+    position: relative;
+    margin-right: 4rem;
+    @media only screen and (max-width: 800px) {
+        display: none;
+    }
+}
+
+.input-wrapper {
+    position: relative;
+    flex: 1;
+    svg {
+        height: 2.4rem;
+        width: 2.4rem;
+        left: 1.6rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    margin-right: 2.4rem;
+    //@media only screen and (max-width: 701px) {
+    //  margin-right: 2.4rem;
+    //}
+}
+
+.input {
+    padding: 1.5rem 1.6rem 1.4rem 5.6rem; // probably top bottom 1.2rem and left right 1.6rem after icon placement
+    border-radius: 0.8rem;
+    border: 1px solid transparent;
     font-size: 1.6rem;
-    line-height: 1.92rem;
-  }
+    width: 44.6rem;
+    font-family: inherit;
+    &::placeholder {
+        font-weight: 300;
+        font-size: 1.6rem;
+        line-height: 1.92rem;
+    }
+    @media only screen and (max-width: 626px) {
+        width: 100%;
+    }
 }
 
-.button{
-  position: absolute;
-  padding: 1.3rem 3.2rem;
-  border-radius: 0.8rem;
-  border: 1px solid transparent;
-  top: 50%;
-  right: 0;
-  transform: translate3d(0, -50%, 0);
-  //color: rgb(57 163 230);
-  background: white;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 1.2rem;
-  line-height: 1.44rem;
+.button {
+    background: #fff;
+    border: 1px solid transparent;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.44rem;
+    padding: 1.3rem 3.2rem;
+    &:after {
+        content: 'Log out';
+    }
+    @media only screen and (max-width: 626px) {
+        background: transparent;
+        border: none;
+        padding: 0;
+        &:after {
+            content: url('../../images/logout.svg');
+        }
+    }
 }

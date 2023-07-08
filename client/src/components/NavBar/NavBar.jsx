@@ -34,7 +34,6 @@ const NavBar = () => {
             if (e.target.id !== 'search-field') {
                 setOpen(false);
                 if (inputValue === '' || inputValue !== selectedName || suggestions.length === 0) {
-                    console.log('in here from listClickOutsideCallback');
                     setSelectedName(null);
                     setInputValue('');
                     setSelected(null);
@@ -64,7 +63,10 @@ const NavBar = () => {
                 index++;
             }
 
-            if (index < suggestions.length && index >= 0) setSelectedName(suggestions[index]);
+            if (index < suggestions.length && index >= 0) {
+                setSelectedName(suggestions[index]);
+                listRef.current.children[index].scrollIntoView({ block: 'end' });
+            }
         }
     }, [open, suggestions, selectedName]);
     const upKeyPressed = useCallback(() => {
@@ -76,7 +78,11 @@ const NavBar = () => {
                 index--;
             }
 
-            if (index < suggestions.length && index >= 0) setSelectedName(suggestions[index]);
+            if (index < suggestions.length && index >= 0) {
+                console.log(index);
+                setSelectedName(suggestions[index]);
+                listRef.current.children[index].scrollIntoView({ block: 'end' });
+            }
         }
     }, [open, suggestions.length, selectedName]);
     const escapeKeyPressed = useCallback(() => {
@@ -109,18 +115,14 @@ const NavBar = () => {
             (suggestions.length && selectedName === null) ||
             !suggestions.length ||
             suggestions[0] !== selectedName
-        )
+        ) {
             setSelectedName(suggestions[0]);
-        //if (!suggestions.length) setSelectedName(null);
-        const element = inputRef.current;
-        if (element) {
-            const boundingClientRect = element.getBoundingClientRect();
-            const widthWithoutBorder =
-                boundingClientRect.width -
-                parseInt(window.getComputedStyle(element).getPropertyValue('border-width')) * 2;
+        }
 
-            boundingClientRect.width = widthWithoutBorder;
-            setInputClientRect(boundingClientRect);
+        const element = inputRef.current;
+
+        if (element) {
+            setInputClientRect(element.getBoundingClientRect());
         }
     }, [suggestions]);
     console.log(inputClientRect);
@@ -131,72 +133,76 @@ const NavBar = () => {
             {/*<img src={logo} className={styles.logo} alt="logo" />*/}
             {/*</div>*/}
             {!token ? <h1 className={styles.title}>Bontouch Team Viewer</h1> : null}
-            <div className={styles['content-wrapper']}>
-                {token ? (
-                    <>
-                        <BTLogo className={styles.logo} />
-                        <div className={styles['input-wrapper']}>
-                            <SearchLogo />
-                            <input
-                                id="search-field"
-                                autoComplete="off"
-                                ref={inputRef}
-                                className={styles.input}
-                                value={inputValue}
-                                placeholder="Search for teams or people..."
-                                onChange={(event) => {
-                                    setInputValue(event.target.value);
-                                    if (event.target.value.length < 3) {
-                                        setSearchQuery('');
-                                        setSelectedName(null);
-                                    } else {
-                                        setSearchQuery(event.target.value);
-                                        if (suggestions.length > 0) setSelectedName(suggestions[0]);
-                                    }
-                                    setSelected(null);
-                                }}
-                                onFocus={() => {
-                                    setOpen(true);
-                                }}
-                                onBlur={() => {
-                                    console.log('outside onblur');
-                                    if (suggestions.length === 0) {
-                                        console.log('inside onblur');
+            <div className={styles.wrapper}>
+                <div className={styles['content-wrapper']}>
+                    {token ? (
+                        <>
+                            <BTLogo className={styles.logo} />
+                            <div className={styles['input-wrapper']}>
+                                <SearchLogo />
+                                <input
+                                    id="search-field"
+                                    autoComplete="off"
+                                    ref={inputRef}
+                                    className={styles.input}
+                                    value={inputValue}
+                                    placeholder="Search for teams or people..."
+                                    onChange={(event) => {
+                                        setInputValue(event.target.value);
+                                        if (event.target.value.length < 3) {
+                                            setSearchQuery('');
+                                            setSelectedName(null);
+                                        } else {
+                                            setSearchQuery(event.target.value);
+                                            if (suggestions.length > 0)
+                                                setSelectedName(suggestions[0]);
+                                        }
                                         setSelected(null);
-                                        setInputValue('');
-                                        setSearchQuery('');
-                                    }
-                                }}
-                            />
-                        </div>
-
-                        {suggestions.length && inputClientRect && open ? (
-                            <ul
-                                style={{
-                                    top: inputClientRect.bottom,
-                                    width: inputClientRect.width
-                                }}
-                                ref={listRef}>
-                                {suggestions.map((suggestion, index) => (
-                                    <li
-                                        key={suggestion}
-                                        onClick={handleListClick}
-                                        className={
-                                            selectedName === suggestion ||
-                                            (index === 0 && selectedName === null)
-                                                ? styles.selected
-                                                : null
-                                        }>
-                                        {suggestion}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : null}
-                        <button className={styles.button} onClick={onLogout}>
-                            Log out
-                        </button>
-                    </>
-                ) : null}
+                                    }}
+                                    onFocus={() => {
+                                        setOpen(true);
+                                    }}
+                                    onBlur={() => {
+                                        console.log('outside onblur');
+                                        if (suggestions.length === 0) {
+                                            console.log('inside onblur');
+                                            setSelected(null);
+                                            setInputValue('');
+                                            setSearchQuery('');
+                                        }
+                                    }}
+                                />
+                                {suggestions.length && inputClientRect && open ? (
+                                    <ul
+                                        style={{
+                                            //top: inputClientRect.top + inputClientRect.height,
+                                            width: inputClientRect.width,
+                                            maxHeight: '50rem',
+                                            overflowY: 'auto'
+                                        }}
+                                        ref={listRef}>
+                                        {suggestions.map((suggestion, index) => (
+                                            <li
+                                                key={suggestion}
+                                                onClick={handleListClick}
+                                                className={
+                                                    selectedName === suggestion ||
+                                                    (index === 0 && selectedName === null)
+                                                        ? styles.selected
+                                                        : null
+                                                }>
+                                                {suggestion}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : null}
+                            </div>
+                            <button className={styles.button} onClick={onLogout}>
+                                {/*Log out*/}
+                            </button>
+                        </>
+                    ) : null}
+                </div>
             </div>
         </div>
     );

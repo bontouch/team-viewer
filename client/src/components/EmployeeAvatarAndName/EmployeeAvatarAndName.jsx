@@ -22,7 +22,7 @@ const Avatar = memo(({ isLoading, url, fullName, className, role }) => {
                         fade
                         size="7x"
                         style={{
-                            color: '#37a3e6',
+                            color: '#4db66b',
                             position: 'absolute',
                             left: '50%',
                             top: '50%',
@@ -42,7 +42,7 @@ const Avatar = memo(({ isLoading, url, fullName, className, role }) => {
                         icon={faUser}
                         size="7x"
                         style={{
-                            color: 'white',
+                            color: '#4db66b',
                             position: 'absolute',
                             left: '50%',
                             top: '50%',
