@@ -34,11 +34,17 @@
         list-style: none;
         li {
             padding: 1.4rem;
-            &:hover,
             &.selected {
                 font-family: inherit;
                 background: #b4bfc7;
                 cursor: pointer;
+            }
+            @media (hover: hover) {
+                &:hover {
+                    font-family: inherit;
+                    background: #b4bfc7;
+                    cursor: pointer;
+                }
             }
         }
     }

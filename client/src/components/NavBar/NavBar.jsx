@@ -128,10 +128,6 @@ const NavBar = () => {
     console.log(inputClientRect);
     return (
         <div className={styles.container}>
-            {/*<div className={styles['logo-wrapper']}>*/}
-            {/*<BTLogo />*/}
-            {/*<img src={logo} className={styles.logo} alt="logo" />*/}
-            {/*</div>*/}
             {!token ? <h1 className={styles.title}>Bontouch Team Viewer</h1> : null}
             <div className={styles.wrapper}>
                 <div className={styles['content-wrapper']}>
@@ -175,9 +171,8 @@ const NavBar = () => {
                                 {suggestions.length && inputClientRect && open ? (
                                     <ul
                                         style={{
-                                            //top: inputClientRect.top + inputClientRect.height,
                                             width: inputClientRect.width,
-                                            maxHeight: '50rem',
+                                            maxHeight: '35vh',
                                             overflowY: 'auto'
                                         }}
                                         ref={listRef}>
