@@ -1,8 +1,9 @@
 import { useSearchStore } from '../NavBar/NavBar';
 import classNames from 'classnames';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState, useRef } from 'react';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { scrollIntoViewWithOffset } from '../../helpers/utils';
 import styles from '../Team/Team.module.scss';
 
 const Avatar = memo(({ isLoading, url, fullName, className, role }) => {
@@ -63,26 +64,27 @@ const Avatar = memo(({ isLoading, url, fullName, className, role }) => {
 const EmployeeAvatarAndName = ({ fullName, url, isLoading, role }) => {
     const selected = useSearchStore((state) => state.selected);
     const [className, setClassName] = useState('');
+    const ref = useRef(null);
 
     const handleMouseEnter = useCallback(() => {
         setClassName(classNames([styles.avatar]));
     }, []);
 
     useEffect(() => {
-        setClassName(
-            classNames([
-                styles.avatar,
-                selected !== null &&
-                selected.length >= 3 &&
-                fullName.toLowerCase() === selected.toLowerCase()
-                    ? styles.highlight
-                    : ''
-            ])
-        );
+        const highlight =
+            selected !== null &&
+            selected.length >= 3 &&
+            fullName.toLowerCase() === selected.toLowerCase();
+
+        setClassName(classNames([styles.avatar, highlight ? styles.highlight : '']));
+
+        if (highlight && document.body.getBoundingClientRect().width <= 900) {
+            scrollIntoViewWithOffset(ref.current, 130);
+        }
     }, [selected, fullName]);
 
     return (
-        <div onMouseEnter={handleMouseEnter}>
+        <div onMouseEnter={handleMouseEnter} ref={ref}>
             <Avatar
                 isLoading={isLoading}
                 url={url}

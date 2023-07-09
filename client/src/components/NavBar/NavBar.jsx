@@ -125,7 +125,7 @@ const NavBar = () => {
             setInputClientRect(element.getBoundingClientRect());
         }
     }, [suggestions]);
-    console.log(inputClientRect);
+
     return (
         <div className={styles.container}>
             {!token ? <h1 className={styles.title}>Bontouch Team Viewer</h1> : null}
@@ -153,7 +153,9 @@ const NavBar = () => {
                                             if (suggestions.length > 0)
                                                 setSelectedName(suggestions[0]);
                                         }
+
                                         setSelected(null);
+                                        document.body.scrollIntoView({ block: 'start' });
                                     }}
                                     onFocus={() => {
                                         setOpen(true);
