@@ -1,0 +1,62 @@
+.employee-item{
+    padding: 1.2rem;
+    background: white;
+    font-size: 1.4rem;
+    border-radius: 1.6rem;
+    a{
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  &.highlight{
+    background: #2CA3E8;
+  }
+}
+
+.avatar-icon-container{
+  width: 14rem;
+  height: 14rem;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.icon{
+  color: #4db66b;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.avatar{
+  width: 14rem;
+  height: 14rem;
+  border-radius: 0.8rem;
+  object-fit: cover;
+  object-position: 50% 0;
+  margin-bottom: 0.5rem;
+}
+
+.name{
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.9rem;
+  letter-spacing: 0;
+  text-align: left;
+  margin-bottom: 0.3rem;
+  &.highlight{
+    color: #ffffff;
+  }
+}
+
+.role{
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.4rem;
+  letter-spacing: 0;
+  text-align: left;
+  &.highlight{
+    color: #ffffff;
+  }
+}

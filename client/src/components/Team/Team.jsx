@@ -69,15 +69,14 @@ const Team = ({ teamName, employees }) => {
 
                 <ul className={styles['employee-list-container']}>
                     {employeeList.map((employee) => (
-                        <li className={styles['employee-item']} key={employee.id}>
-                            <EmployeeAvatarAndName
-                                fullName={employee.fullName}
-                                id={employee.id}
-                                url={isLoadingAvatars ? null : avatars[employee.id]}
-                                isLoading={isLoadingAvatars}
-                                role={employee.department}
-                            />
-                        </li>
+                        <EmployeeAvatarAndName
+                            key={employee.id}
+                            fullName={employee.fullName}
+                            id={employee.id}
+                            url={isLoadingAvatars ? null : avatars[employee.id]}
+                            isLoading={isLoadingAvatars}
+                            role={employee.department}
+                        />
                     ))}
                 </ul>
             </div>

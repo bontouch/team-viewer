@@ -1,5 +1,4 @@
 .container{
-  //width: 80%;
   max-width: 120rem;
   position: relative;
   margin: 2rem auto 4rem;
@@ -13,21 +12,12 @@
 
 .title{
   color: black;
-  //padding: 1rem;
-  //font-size: x-large;
   flex: 1;
   font-size: 3.2rem;
   font-weight: 400;
   line-height: 3.8rem;
   letter-spacing: 0;
   text-align: left;
-
-}
-
-.department{
-  padding: 1rem;
-  font-size: large;
-  color: #37a3e6;
 }
 
 .wrapper{
@@ -35,32 +25,10 @@
   margin-bottom: 2rem;
   display: flex;
   flex-wrap: wrap;
-  //padding-right: 2.4rem;
-}
-
-.split{
-  cursor: pointer;
-  position: absolute;
-  right: 2.4rem;
-  color: black;
-  font-size: large;
-  background-color: transparent;
-  border-width: 0;
-  font-family: inherit;
-  font-style: inherit;
-  font-weight: inherit;
-  line-height: inherit;
-  padding: 0;
 }
 
 .employee-list-container{
-  //display: flex;
   list-style-type: none;
-  //margin: 0;
-  //flex-flow: row wrap;
-  //justify-content: flex-start;
-
-
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: 3.2rem;
@@ -68,69 +36,4 @@
   place-items: center;
   max-width: 120rem;
   margin: 0 auto;
-  //padding: 100px 20px;
-}
-
-.employee-item{
-  padding: 1.2rem;
-  background: white;
-  font-size: 1.4rem;
-  border-radius: 1.6rem;
-  a{
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-  }
-}
-
-.avatar{
-  width: 14rem;
-  height: 14rem;
-  border-radius: 0.8rem;
-  object-fit: cover;
-  object-position: 50% 0;
-  margin-bottom: 0.5rem;
-}
-
-.name{
-  font-size: 1.6rem;
-  font-weight: 300;
-  line-height: 1.9rem;
-  letter-spacing: 0;
-  text-align: left;
-  margin-bottom: 0.3rem;
-}
-
-.role{
-  font-size: 1.2rem;
-  font-weight: 400;
-  line-height: 1.4rem;
-  letter-spacing: 0;
-  text-align: left;
-
-}
-
-.loading{
-  width: 16rem;
-  height: 16rem;
-  border-radius: 0.2rem;
-  background: grey;
-}
-
-.highlight {
-  animation: filter-animation 1.5s infinite;
-}
-
-@keyframes filter-animation {
-  0% {
-    filter: sepia(0) brightness(0.7) saturate(1);
-  }
-
-  50% {
-    filter: sepia(0.8) brightness(1) saturate(2.7);
-  }
-
-  100% {
-    filter: sepia(0) brightness(0.7) saturate(1);
-  }
 }

@@ -8,6 +8,7 @@ import { useSuggestionsStore } from '../../pages/Teams/Teams';
 import useClickOutside from '../../helpers/useClickOutside';
 import useKeyPressed from '../../helpers/useKeyPressed';
 import { ReactComponent as SearchLogo } from '../../images/search.svg';
+import { ReactComponent as CloseIcon } from '../../images/close.svg';
 import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
 
 export const useSearchStore = create((set) => ({
@@ -126,6 +127,15 @@ const NavBar = () => {
         }
     }, [suggestions]);
 
+    const onButtonClick = useCallback(() => {
+        setSelected(null);
+        setInputValue('');
+        setSearchQuery('');
+        setSelectedName(null);
+        setSuggestions([]);
+        inputRef.current.focus();
+    }, []);
+
     return (
         <div className={styles.container}>
             {!token ? <h1 className={styles.title}>Bontouch Team Viewer</h1> : null}
@@ -135,41 +145,49 @@ const NavBar = () => {
                         <>
                             <BTLogo className={styles.logo} />
                             <div className={styles['input-wrapper']}>
-                                <SearchLogo />
-                                <input
-                                    id="search-field"
-                                    autoComplete="off"
-                                    ref={inputRef}
-                                    className={styles.input}
-                                    value={inputValue}
-                                    placeholder="Search for teams or people..."
-                                    onChange={(event) => {
-                                        setInputValue(event.target.value);
-                                        if (event.target.value.length < 3) {
-                                            setSearchQuery('');
-                                            setSelectedName(null);
-                                        } else {
-                                            setSearchQuery(event.target.value);
-                                            if (suggestions.length > 0)
-                                                setSelectedName(suggestions[0]);
-                                        }
+                                <span style={{ position: 'relative' }}>
+                                    <SearchLogo className={styles['search-logo']} />
+                                    <button
+                                        className={styles['close-button']}
+                                        onClick={onButtonClick}>
+                                        <CloseIcon />
+                                    </button>
+                                    <input
+                                        id="search-field"
+                                        autoComplete="off"
+                                        ref={inputRef}
+                                        className={styles.input}
+                                        value={inputValue}
+                                        placeholder="Search for teams or people..."
+                                        onChange={(event) => {
+                                            setInputValue(event.target.value);
+                                            if (event.target.value.length < 3) {
+                                                setSearchQuery('');
+                                                setSelectedName(null);
+                                            } else {
+                                                setSearchQuery(event.target.value);
+                                                if (suggestions.length > 0)
+                                                    setSelectedName(suggestions[0]);
+                                            }
 
-                                        setSelected(null);
-                                        document.body.scrollIntoView({ block: 'start' });
-                                    }}
-                                    onFocus={() => {
-                                        setOpen(true);
-                                    }}
-                                    onBlur={() => {
-                                        console.log('outside onblur');
-                                        if (suggestions.length === 0) {
-                                            console.log('inside onblur');
                                             setSelected(null);
-                                            setInputValue('');
-                                            setSearchQuery('');
-                                        }
-                                    }}
-                                />
+                                            document.body.scrollIntoView({ block: 'start' });
+                                        }}
+                                        onFocus={() => {
+                                            setOpen(true);
+                                        }}
+                                        onBlur={() => {
+                                            console.log('outside onblur');
+                                            if (suggestions.length === 0) {
+                                                console.log('inside onblur');
+                                                setSelected(null);
+                                                setInputValue('');
+                                                setSearchQuery('');
+                                            }
+                                        }}
+                                    />
+                                </span>
+
                                 {suggestions.length && inputClientRect && open ? (
                                     <ul
                                         style={{
