@@ -7,9 +7,10 @@ import styles from './NavBar.module.scss';
 import { useSuggestionsStore } from '../../pages/Teams/Teams';
 import useClickOutside from '../../helpers/useClickOutside';
 import useKeyPressed from '../../helpers/useKeyPressed';
-import { ReactComponent as SearchLogo } from '../../images/search.svg';
+import { ReactComponent as SearchIcon } from '../../images/search.svg';
 import { ReactComponent as CloseIcon } from '../../images/close.svg';
 import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
+//import { scrollIntoViewWithOffset } from '../../helpers/utils';
 
 export const useSearchStore = create((set) => ({
     searchQuery: '',
@@ -80,7 +81,6 @@ const NavBar = () => {
             }
 
             if (index < suggestions.length && index >= 0) {
-                console.log(index);
                 setSelectedName(suggestions[index]);
                 listRef.current.children[index].scrollIntoView({ block: 'end' });
             }
@@ -127,13 +127,15 @@ const NavBar = () => {
         }
     }, [suggestions]);
 
-    const onButtonClick = useCallback(() => {
+    const onButtonAndLogoClick = useCallback(() => {
         setSelected(null);
         setInputValue('');
         setSearchQuery('');
         setSelectedName(null);
         setSuggestions([]);
         inputRef.current.focus();
+        //scrollIntoViewWithOffset(window.document.body, 0);
+        window.scrollTo(0, 0);
     }, []);
 
     return (
@@ -143,15 +145,20 @@ const NavBar = () => {
                 <div className={styles['content-wrapper']}>
                     {token ? (
                         <>
-                            <BTLogo className={styles.logo} />
+                            <button className={styles.logo} onClick={onButtonAndLogoClick}>
+                                <BTLogo />
+                            </button>
                             <div className={styles['input-wrapper']}>
                                 <span style={{ position: 'relative' }}>
-                                    <SearchLogo className={styles['search-logo']} />
-                                    <button
-                                        className={styles['close-button']}
-                                        onClick={onButtonClick}>
-                                        <CloseIcon />
-                                    </button>
+                                    <SearchIcon className={styles['search-icon']} />
+                                    {inputValue ? (
+                                        <button
+                                            className={styles['close-button']}
+                                            onClick={onButtonAndLogoClick}>
+                                            <CloseIcon />
+                                        </button>
+                                    ) : null}
+
                                     <input
                                         id="search-field"
                                         autoComplete="off"
@@ -177,9 +184,7 @@ const NavBar = () => {
                                             setOpen(true);
                                         }}
                                         onBlur={() => {
-                                            console.log('outside onblur');
                                             if (suggestions.length === 0) {
-                                                console.log('inside onblur');
                                                 setSelected(null);
                                                 setInputValue('');
                                                 setSearchQuery('');

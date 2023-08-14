@@ -45,7 +45,6 @@ const Team = ({ teamName, employees }) => {
     );
 
     const employeesArrayOrderedByDepartmentWeight = useMemo(() => {
-        console.log('use memo');
         return departmentKeysOrdered
             .map((departmentKey) => {
                 if (!employeesByDepartment[departmentKey]) return undefined;
@@ -75,7 +74,9 @@ const Team = ({ teamName, employees }) => {
                             id={employee.id}
                             url={isLoadingAvatars ? null : avatars[employee.id]}
                             isLoading={isLoadingAvatars}
+                            department={employee.department}
                             role={employee.department}
+                            teamName={teamName}
                         />
                     ))}
                 </ul>

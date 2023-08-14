@@ -59,6 +59,13 @@
 .logo {
     position: relative;
     margin-right: 4rem;
+    border: none;
+    background: none;
+
+    &:hover{
+        cursor: pointer;
+    }
+
     @media only screen and (max-width: 800px) {
         display: none;
     }
@@ -67,25 +74,26 @@
 .input-wrapper {
     position: relative;
     flex: 1;
-    .search-logo, .close-button {
-        height: 2.4rem;
-        width: 2.4rem;
-        left: 1.6rem;
-        position: absolute;
-        top: 40%;
-        transform: translateY(-50%);
-    }
-    .close-button {
-        right: 1.6rem;
-        left: unset;
-        top: 35%;
-        border: none;
-        background: none;
-        &:hover{
-            cursor: pointer;
-        }
-    }
     margin-right: 2.4rem;
+}
+
+.search-icon, .close-button {
+    height: 2.4rem;
+    width: 2.4rem;
+    left: 1.6rem;
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+}
+.close-button {
+    right: 1.6rem;
+    left: unset;
+    top: 35%;
+    border: none;
+    background: none;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 .input {

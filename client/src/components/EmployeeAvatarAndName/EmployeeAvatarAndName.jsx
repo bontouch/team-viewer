@@ -1,63 +1,80 @@
 import { useSearchStore } from '../NavBar/NavBar';
 import classNames from 'classnames';
-import { memo, useEffect, useState, useRef } from 'react';
+import { memo, useRef, useMemo, useCallback, forwardRef } from 'react';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { scrollIntoViewWithOffset } from '../../helpers/utils';
 import styles from './EmployeeAvatarAndName.module.scss';
+import { useEmployeeToScrollToStore } from '../../pages/Teams/Teams';
 
-const Avatar = memo(({ isLoading, url, fullName, role, highlight }) => {
-    return (
-        <>
-            {isLoading ? (
-                <div className={styles['avatar-icon-container']}>
-                    <FontAwesomeIcon icon={faUser} fade size="7x" className={styles.icon} />
+const AvatarAndName = memo(
+    forwardRef(({ isLoading, url, fullName, role, highlight }, ref) => {
+        return (
+            <li
+                className={classNames([styles['employee-item'], highlight ? styles.highlight : ''])}
+                ref={ref}>
+                {isLoading ? (
+                    <div className={styles['avatar-icon-container']}>
+                        <FontAwesomeIcon icon={faUser} fade size="7x" className={styles.icon} />
+                    </div>
+                ) : !url ? (
+                    <div className={styles['avatar-icon-container']}>
+                        <FontAwesomeIcon icon={faUser} size="7x" className={styles.icon} />
+                    </div>
+                ) : (
+                    <img className={styles.avatar} src={url} alt="employee avatar" />
+                )}
+                <div className={styles['name-and-role-container']}>
+                    <p className={classNames([styles.name, highlight ? styles.highlight : ''])}>
+                        {fullName}
+                    </p>
+                    <p className={classNames([styles.role, highlight ? styles.highlight : ''])}>
+                        {role}
+                    </p>
                 </div>
-            ) : !url ? (
-                <div className={styles['avatar-icon-container']}>
-                    <FontAwesomeIcon icon={faUser} size="7x" className={styles.icon} />
-                </div>
-            ) : (
-                <img className={styles.avatar} src={url} alt="employee avatar" />
-            )}
-            <p className={classNames([styles.name, highlight ? styles.highlight : ''])}>
-                {fullName}
-            </p>
-            <p className={classNames([styles.role, highlight ? styles.highlight : ''])}>{role}</p>
-        </>
-    );
-});
+            </li>
+        );
+    })
+);
 
-const EmployeeAvatarAndName = ({ fullName, url, isLoading, role }) => {
+const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, teamName }) => {
     const selected = useSearchStore((state) => state.selected);
-    const [highlight, setHighlight] = useState(false);
+    const { employeeToScrollTo, teamKey } = useEmployeeToScrollToStore(
+        (state) => state.employeeToScrollTo
+    );
     const ref = useRef(null);
-
-    useEffect(() => {
-        const highlight =
+    const highlight = useMemo(
+        () =>
             selected !== null &&
             selected.length >= 3 &&
-            fullName.toLowerCase() === selected.toLowerCase();
+            (fullName.toLowerCase() === selected.toLowerCase() ||
+                department.toLowerCase().includes(selected.toLowerCase())),
+        [selected]
+    );
 
-        setHighlight(highlight);
-
-        if (highlight && document.body.getBoundingClientRect().width <= 900) {
-            scrollIntoViewWithOffset(ref.current, 130);
+    const scroll = useCallback(() => {
+        if (highlight) {
+            if (
+                employeeToScrollTo &&
+                teamKey &&
+                employeeToScrollTo.toLowerCase() === fullName.toLowerCase() &&
+                teamKey.toLowerCase() === teamName.toLowerCase()
+            )
+                scrollIntoViewWithOffset(ref.current, 45);
         }
-    }, [selected, fullName]);
+    }, [highlight, employeeToScrollTo]);
 
+    scroll();
     return (
-        <li
-            className={classNames([styles['employee-item'], highlight ? styles.highlight : ''])}
-            ref={ref}>
-            <Avatar
-                isLoading={isLoading}
-                url={url}
-                fullName={fullName}
-                role={role}
-                highlight={highlight}
-            />
-        </li>
+        <AvatarAndName
+            isLoading={isLoading}
+            url={url}
+            fullName={fullName}
+            role={role}
+            department={department}
+            highlight={highlight}
+            ref={ref}
+        />
     );
 };
 export default EmployeeAvatarAndName;

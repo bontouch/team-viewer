@@ -15,20 +15,51 @@ export const useSuggestionsStore = create((set) => ({
     setSuggestions: (suggestions) => set(() => ({ suggestions }))
 }));
 
+export const useEmployeeToScrollToStore = create((set) => ({
+    employeeToScrollTo: {},
+    setEmployeeToScrollTo: (employeeToScrollTo) => set(() => ({ employeeToScrollTo }))
+}));
+
 const Teams = () => {
     axios.defaults.headers.common['Authorization'] = getTokenFromLocalStorage();
     const { data: teams, isLoading } = useTeams();
     useAvatars();
+    const selected = useSearchStore((state) => state.selected);
     const searchQuery = useSearchStore((state) => state.searchQuery);
     const setSuggestions = useSuggestionsStore((state) => state.setSuggestions);
+    const setEmployeeToScrollTo = useEmployeeToScrollToStore(
+        (state) => state.setEmployeeToScrollTo
+    );
     const teamKeysSorted = useMemo(() => {
         if (isLoading) return [];
         return Object.keys(teams).sort();
     }, [teams, isLoading]);
 
+    const departments = useMemo(() => {
+        if (isLoading) return [];
+        if (teamKeysSorted.length === 0) return;
+
+        return teamKeysSorted
+            .map((key) => {
+                return teams[key].reduce((curr, next) => {
+                    if (!(curr.department?.indexOf(next.department) >= 0))
+                        curr.push(next.department);
+                    return curr;
+                }, []);
+            })
+            .flat()
+            .reduce((curr, next) => {
+                if (!(curr.indexOf(next) >= 0)) curr.push(next);
+                return curr;
+            }, []);
+    }, [teams, isLoading, teamKeysSorted]);
+
     const suggestions = useMemo(() => {
         if (searchQuery === '') return [];
         return [
+            ...departments.filter((department) =>
+                department.toLowerCase().includes(searchQuery.toLowerCase())
+            ),
             ...teamKeysSorted.filter((teamKey) =>
                 teamKey.toLowerCase().includes(searchQuery.toLowerCase())
             ),
@@ -42,16 +73,38 @@ const Teams = () => {
                         .map((employee) => employee.fullName)
                 )
                 .flat()
-                .reduce((curr, next) => {
-                    if (!(curr.indexOf(next) >= 0)) curr.push(next);
-                    return curr;
-                }, [])
-        ].sort();
+        ]
+            .reduce((curr, next) => {
+                if (!(curr.indexOf(next) >= 0)) curr.push(next);
+                return curr;
+            }, [])
+            .sort();
     }, [searchQuery, teamKeysSorted, teams]);
 
     useEffect(() => {
         setSuggestions(suggestions);
     }, [suggestions, setSuggestions]);
+
+    useEffect(() => {
+        if (selected) {
+            let employeeToScrollTo = null;
+            const firstAppearsInTeam = teamKeysSorted.find((teamKey) => {
+                const team = teams[teamKey];
+                return team.find((teamMember) => {
+                    if (
+                        teamMember.fullName.toLowerCase() === selected.toLowerCase() ||
+                        teamMember.department.toLowerCase().includes(selected.toLowerCase())
+                    ) {
+                        employeeToScrollTo = teamMember.fullName;
+                        return true;
+                    }
+                });
+            });
+            setEmployeeToScrollTo({ employeeToScrollTo, teamKey: firstAppearsInTeam });
+        } else {
+            setEmployeeToScrollTo({});
+        }
+    }, [selected]);
 
     if (isLoading) {
         return (
@@ -81,12 +134,15 @@ const Teams = () => {
             ) : null}
             {teamKeysSorted.map((teamKey) => {
                 const teamEmployees = teams[teamKey];
+                const selectedTeamEmployees = teamEmployees.filter(
+                    (employee) =>
+                        employee.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        employee.department.toLowerCase().includes(searchQuery.toLowerCase())
+                );
                 const show =
                     searchQuery === '' ||
                     teamKey.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    teamEmployees.find((employee) =>
-                        employee.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-                    );
+                    selectedTeamEmployees.length !== 0;
                 return (
                     <span
                         key={teamKey}
