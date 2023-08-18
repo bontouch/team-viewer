@@ -1,10 +1,9 @@
 import { memo, useMemo, useState } from 'react';
-//import { compareArrays } from '../../helpers/utils';
+import { compareArrays } from '../../helpers/utils';
 import styles from './Team.module.scss';
 import EmployeeAvatarAndName from '../EmployeeAvatarAndName/EmployeeAvatarAndName';
 import Slider from '../Slider/Slider';
 import useAvatarsQuery from '../../helpers/queries/useAvatarsQuery';
-import useTeams from '../../helpers/useTeams';
 
 const departmentsByWeight = [
     'Management',
@@ -19,8 +18,7 @@ const departmentsByWeight = [
     'Cloud'
 ];
 
-const Team = ({ teamName /*index*/ }) => {
-    const { employees } = useTeams({ teamName });
+const TeamOld = ({ teamName, employees }) => {
     const { data: avatars, isLoading: isLoadingAvatars } = useAvatarsQuery();
     const [orderByDepartment, setOrderByDepartment] = useState(false);
 
@@ -88,4 +86,6 @@ const Team = ({ teamName /*index*/ }) => {
     );
 };
 
-export default memo(Team);
+export default memo(TeamOld, (prevProps, nextProps) =>
+    compareArrays(prevProps.employees, nextProps.employees)
+);

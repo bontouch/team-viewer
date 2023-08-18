@@ -1,6 +1,6 @@
 .container {
     height: 10rem;
-    background-color: #4db66b;
+    background-color: #32353F;
     width: 100%;
     top: 0;
     position: fixed;
@@ -77,7 +77,7 @@
     margin-right: 2.4rem;
 }
 
-.search-icon, .close-button {
+.search-icon, .clear-button {
     height: 2.4rem;
     width: 2.4rem;
     left: 1.6rem;
@@ -85,7 +85,7 @@
     top: 40%;
     transform: translateY(-50%);
 }
-.close-button {
+.clear-button {
     right: 1.6rem;
     left: unset;
     top: 35%;
@@ -123,7 +123,11 @@
     font-size: 1.2rem;
     font-weight: 600;
     line-height: 1.44rem;
-    padding: 1.3rem 3.2rem;
+    padding: 1.2rem 2.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+    height: 4rem;
     &:after {
         content: 'Log out';
     }

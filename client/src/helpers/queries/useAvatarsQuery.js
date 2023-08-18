@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useAuth } from './useAuth';
+import { useAuth } from '../useAuth';
 
-const useAvatar = () => {
+const useAvatarsQuery = () => {
     const { onLogout } = useAuth();
 
     return useQuery(
@@ -27,4 +27,4 @@ const useAvatar = () => {
     );
 };
 
-export default useAvatar;
+export default useAvatarsQuery;

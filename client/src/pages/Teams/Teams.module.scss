@@ -1,19 +1,25 @@
-.load {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    > span {
-        left: 50%;
-        top: 50%;
-        transform: translate3d(-50%, -50%, 0);
-        position: absolute;
-    }
-}
-
 .teams {
     &:before {
         height: 10rem;
         display: block;
         content: '';
     }
+    &:after{
+        height: 2.5rem;
+        display: block;
+        content: '';
+    }
+
+    display: flex;
+    flex-direction: column;
+}
+
+.no-result{
+    font-size: xx-large;
+    margin: 0 auto;
+    width: auto;
+    position: absolute;
+    left: 50%;
+    top: 20rem;
+    transform: translateX(-50%);
 }

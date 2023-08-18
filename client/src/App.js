@@ -12,13 +12,13 @@ function App() {
         <BrowserRouter>
             <AuthProvider>
                 <div className={styles.app}>
-                    <NavBar />
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route
                             path="/teams"
                             element={
                                 <ProtectedRoute>
+                                    <NavBar />
                                     <Teams />
                                 </ProtectedRoute>
                             }

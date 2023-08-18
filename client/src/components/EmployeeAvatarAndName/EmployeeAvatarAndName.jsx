@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { memo, useRef, useMemo, useCallback, forwardRef } from 'react';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { scrollIntoViewWithOffset } from '../../helpers/utils';
+import { normalizeString, scrollIntoViewWithOffset } from '../../helpers/utils';
 import styles from './EmployeeAvatarAndName.module.scss';
 import { useEmployeeToScrollToStore } from '../../pages/Teams/Teams';
 
@@ -28,9 +28,9 @@ const AvatarAndName = memo(
                     <p className={classNames([styles.name, highlight ? styles.highlight : ''])}>
                         {fullName}
                     </p>
-                    <p className={classNames([styles.role, highlight ? styles.highlight : ''])}>
-                        {role}
-                    </p>
+                    <span className={styles.pill}>
+                        <p className={styles.role}>{role}</p>
+                    </span>
                 </div>
             </li>
         );
@@ -47,22 +47,22 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, tea
         () =>
             selected !== null &&
             selected.length >= 3 &&
-            (fullName.toLowerCase() === selected.toLowerCase() ||
-                department.toLowerCase().includes(selected.toLowerCase())),
+            (normalizeString(fullName) === normalizeString(selected) ||
+                normalizeString(department).includes(normalizeString(selected))),
         [selected]
     );
 
     const scroll = useCallback(() => {
-        if (highlight) {
+        if (highlight && ref.current) {
             if (
                 employeeToScrollTo &&
                 teamKey &&
-                employeeToScrollTo.toLowerCase() === fullName.toLowerCase() &&
-                teamKey.toLowerCase() === teamName.toLowerCase()
+                normalizeString(employeeToScrollTo) === normalizeString(fullName) &&
+                normalizeString(teamKey) === normalizeString(teamName)
             )
                 scrollIntoViewWithOffset(ref.current, 45);
         }
-    }, [highlight, employeeToScrollTo]);
+    }, [highlight, employeeToScrollTo, ref.current]);
 
     scroll();
     return (

@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
+
 import { useAuth } from '../../helpers/useAuth';
-import styles from '../Teams/Teams.module.scss';
+
 import Loader from '../../components/Loader/Loader';
+
+import SignInImage from '../../images/singInImage.png';
+import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
+
+import styles from './Login.module.scss';
 
 const loadGoogleScript = () =>
     new Promise((resolve, reject) => {
@@ -35,14 +41,13 @@ const Login = () => {
                     /*eslint-disable no-undef*/
                     if (window.google !== undefined) {
                         google.accounts.id.initialize({
-                            client_id:
-                                '520089236563-8kp9d3cpoejc6q9mt0aqmbm5oicg8pus.apps.googleusercontent.com',
+                            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
                             callback: handleCallbackResponse,
-                            prompt_parent_id: 'signinDiv',
+                            prompt_parent_id: 'signInDiv',
                             cancel_on_tap_outside: false,
                             error_callback: handleError
                         });
-                        google.accounts.id.renderButton(document.getElementById('signinDiv'), {
+                        google.accounts.id.renderButton(document.getElementById('signInDiv'), {
                             theme: 'outline',
                             size: 'large'
                         });
@@ -55,26 +60,22 @@ const Login = () => {
         }
     }, [onLogin]);
     if (isLoading) {
-        return (
-            <div className={styles.load}>
-                <span>
-                    <Loader />
-                </span>
-            </div>
-        );
+        return <Loader />;
     }
 
     return (
-        <div
-            id="signinDiv"
-            data-cancel_on_tap_outside="false"
-            style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translateX(-50%) translateY(-50%)',
-                zIndex: 1001
-            }}></div>
+        <div className={styles.container}>
+            <img className={styles.image} src={SignInImage} alt="" />
+            <BTLogo className={styles.logo} />
+            <h1 className={styles.title}>Bontouch Team Viewer</h1>
+            <p className={styles.text}>Let’s find some people...</p>
+            <div className={styles.wrapper}>
+                <div
+                    id="signInDiv"
+                    data-cancel_on_tap_outside="false"
+                    className={styles.google}></div>
+            </div>
+        </div>
     );
 };
 

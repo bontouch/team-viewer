@@ -1,21 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import create from 'zustand';
+import { create } from 'zustand';
 
 import { useAuth } from '../../helpers/useAuth';
-
-import styles from './NavBar.module.scss';
-import { useSuggestionsStore } from '../../pages/Teams/Teams';
 import useClickOutside from '../../helpers/useClickOutside';
 import useKeyPressed from '../../helpers/useKeyPressed';
+import useSuggestions from '../../helpers/useSuggestions';
+
 import { ReactComponent as SearchIcon } from '../../images/search.svg';
 import { ReactComponent as CloseIcon } from '../../images/close.svg';
 import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
-//import { scrollIntoViewWithOffset } from '../../helpers/utils';
+
+import styles from './NavBar.module.scss';
+
+const initialState = {
+    searchQuery: '',
+    hasSearchedMinChars: false,
+    selected: null
+};
 
 export const useSearchStore = create((set) => ({
-    searchQuery: '',
-    selected: null,
-    setSearchQuery: (query) => set(() => ({ searchQuery: query })),
+    ...initialState,
+    setSearchQuery: (query) =>
+        set(() => ({ searchQuery: query, hasSearchedMinChars: query.length >= 2 })),
     setSelected: (selected) => set(() => ({ selected }))
 }));
 
@@ -23,10 +29,11 @@ const NavBar = () => {
     const { token, onLogout } = useAuth();
     const setSearchQuery = useSearchStore((state) => state.setSearchQuery);
     const setSelected = useSearchStore((state) => state.setSelected);
-    const suggestions = useSuggestionsStore((state) => state.suggestions);
-    const setSuggestions = useSuggestionsStore((state) => state.setSuggestions);
-    const [inputValue, setInputValue] = useState('');
+    const selected = useSearchStore((state) => state.selected);
+    const { suggestions } = useSuggestions();
+    const [inputValue, setInputValue] = useState(selected ?? '');
     const inputRef = useRef(null);
+    const clearButtonRef = useRef(null);
     const [inputClientRect, setInputClientRect] = useState(null);
     const [open, setOpen] = useState(false);
     const [selectedName, setSelectedName] = useState(null);
@@ -39,7 +46,7 @@ const NavBar = () => {
                     setSelectedName(null);
                     setInputValue('');
                     setSelected(null);
-                    setSuggestions([]);
+                    setSearchQuery('');
                 }
             }
         },
@@ -92,7 +99,7 @@ const NavBar = () => {
             setSelectedName(null);
             setInputValue('');
             setSelected(null);
-            setSuggestions([]);
+            setSearchQuery('');
         }
         setTimeout(() => inputRef.current.blur(), 100);
     }, [inputValue, selectedName, suggestions.length]);
@@ -127,14 +134,12 @@ const NavBar = () => {
         }
     }, [suggestions]);
 
-    const onButtonAndLogoClick = useCallback(() => {
+    const onButtonAndLogoClick = useCallback((setInputCaret = true) => {
         setSelected(null);
         setInputValue('');
         setSearchQuery('');
         setSelectedName(null);
-        setSuggestions([]);
-        inputRef.current.focus();
-        //scrollIntoViewWithOffset(window.document.body, 0);
+        setInputCaret && inputRef.current.focus();
         window.scrollTo(0, 0);
     }, []);
 
@@ -145,20 +150,24 @@ const NavBar = () => {
                 <div className={styles['content-wrapper']}>
                     {token ? (
                         <>
-                            <button className={styles.logo} onClick={onButtonAndLogoClick}>
+                            <button
+                                tabIndex="-1"
+                                className={styles.logo}
+                                onClick={() => onButtonAndLogoClick(false)}>
                                 <BTLogo />
                             </button>
                             <div className={styles['input-wrapper']}>
                                 <span style={{ position: 'relative' }}>
                                     <SearchIcon className={styles['search-icon']} />
-                                    {inputValue ? (
-                                        <button
-                                            className={styles['close-button']}
-                                            onClick={onButtonAndLogoClick}>
-                                            <CloseIcon />
-                                        </button>
-                                    ) : null}
 
+                                    <button
+                                        tabIndex={1}
+                                        ref={clearButtonRef}
+                                        style={{ display: inputValue ? 'block' : 'none' }}
+                                        className={styles['clear-button']}
+                                        onClick={onButtonAndLogoClick}>
+                                        <CloseIcon />
+                                    </button>
                                     <input
                                         id="search-field"
                                         autoComplete="off"
@@ -168,7 +177,7 @@ const NavBar = () => {
                                         placeholder="Search for teams or people..."
                                         onChange={(event) => {
                                             setInputValue(event.target.value);
-                                            if (event.target.value.length < 3) {
+                                            if (event.target.value.length < 2) {
                                                 setSearchQuery('');
                                                 setSelectedName(null);
                                             } else {
@@ -182,19 +191,32 @@ const NavBar = () => {
                                         }}
                                         onFocus={() => {
                                             setOpen(true);
+                                            if (inputRef.current)
+                                                inputRef.current.setSelectionRange(
+                                                    inputRef.current.value.length,
+                                                    inputRef.current.value.length
+                                                );
                                         }}
+                                        autoFocus={true}
                                         onBlur={() => {
                                             if (suggestions.length === 0) {
                                                 setSelected(null);
                                                 setInputValue('');
                                                 setSearchQuery('');
+                                            } else {
+                                                setTimeout(() => {
+                                                    clearButtonRef.current.focus();
+                                                }, 50);
                                             }
                                         }}
                                     />
                                 </span>
-
-                                {suggestions.length && inputClientRect && open ? (
+                                {inputClientRect &&
+                                suggestions.length &&
+                                inputClientRect &&
+                                open ? (
                                     <ul
+                                        tabIndex="-1"
                                         style={{
                                             width: inputClientRect.width,
                                             maxHeight: '35vh',
@@ -217,9 +239,14 @@ const NavBar = () => {
                                     </ul>
                                 ) : null}
                             </div>
-                            <button className={styles.button} onClick={onLogout}>
-                                {/*Log out*/}
-                            </button>
+                            <div>
+                                <button
+                                    tabIndex={2}
+                                    type="submit"
+                                    className={styles.button}
+                                    onClick={onLogout}
+                                />
+                            </div>
                         </>
                     ) : null}
                 </div>
