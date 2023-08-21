@@ -11,6 +11,7 @@ import { ReactComponent as CloseIcon } from '../../images/close.svg';
 import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
 
 import styles from './NavBar.module.scss';
+//import { scrollIntoViewWithOffset } from '../../helpers/utils';
 
 const initialState = {
     searchQuery: '',
@@ -135,15 +136,17 @@ const NavBar = () => {
     }, [suggestions]);
 
     const onButtonAndLogoClick = useCallback((setInputCaret = true) => {
+        window.scrollTo({
+            behavior: 'auto',
+            top: 0
+        });
         setSelected(null);
         setInputValue('');
         setSearchQuery('');
         setSelectedName(null);
         setInputCaret && inputRef.current.focus();
-        window.scrollTo({
-            behavior: 'instant',
-            top: 0
-        });
+
+        //scrollIntoViewWithOffset(window.document.body, -10000, 'auto');
     }, []);
 
     return (
