@@ -39,9 +39,10 @@ const AvatarAndName = memo(
 
 const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, teamName }) => {
     const selected = useSearchStore((state) => state.selected);
-    const { employeeToScrollTo, teamKey } = useEmployeeToScrollToStore(
-        (state) => state.employeeToScrollTo
-    );
+    const [{ employeeToScrollTo, teamKey }, shouldScroll] = useEmployeeToScrollToStore((state) => [
+        state.employeeToScrollTo,
+        state.shouldScroll
+    ]);
     const ref = useRef(null);
     const highlight = useMemo(
         () =>
@@ -53,7 +54,7 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, tea
     );
 
     const scroll = useCallback(() => {
-        if (highlight && ref.current) {
+        if (highlight && ref.current && shouldScroll) {
             if (
                 employeeToScrollTo &&
                 teamKey &&
@@ -62,7 +63,7 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, tea
             )
                 scrollIntoViewWithOffset(ref.current, 45);
         }
-    }, [highlight, employeeToScrollTo, ref.current]);
+    }, [highlight, employeeToScrollTo, ref.current, shouldScroll]);
 
     scroll();
     return (

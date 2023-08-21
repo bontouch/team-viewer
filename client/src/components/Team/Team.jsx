@@ -1,10 +1,10 @@
 import { memo, useMemo, useState } from 'react';
-//import { compareArrays } from '../../helpers/utils';
+import { compareArrays } from '../../helpers/utils';
 import styles from './Team.module.scss';
 import EmployeeAvatarAndName from '../EmployeeAvatarAndName/EmployeeAvatarAndName';
 import Slider from '../Slider/Slider';
 import useAvatarsQuery from '../../helpers/queries/useAvatarsQuery';
-import useTeams from '../../helpers/useTeams';
+import { useEmployeeToScrollToStore } from '../../pages/Teams/Teams';
 
 const departmentsByWeight = [
     'Management',
@@ -19,10 +19,10 @@ const departmentsByWeight = [
     'Cloud'
 ];
 
-const Team = ({ teamName /*index*/ }) => {
-    const { employees } = useTeams({ teamName });
+const Team = ({ teamName, employees }) => {
     const { data: avatars, isLoading: isLoadingAvatars } = useAvatarsQuery();
     const [orderByDepartment, setOrderByDepartment] = useState(false);
+    const setShouldScroll = useEmployeeToScrollToStore((state) => state.setShouldScroll);
 
     const employeesByDepartment = useMemo(
         () =>
@@ -65,7 +65,12 @@ const Team = ({ teamName /*index*/ }) => {
                 <div className={styles.wrapper}>
                     <h2 className={styles.title}>{teamName}</h2>
                     {Object.keys(employeesByDepartment).length > 1 ? (
-                        <Slider callback={() => setOrderByDepartment(!orderByDepartment)} />
+                        <Slider
+                            callback={() => {
+                                setShouldScroll(false);
+                                setOrderByDepartment(!orderByDepartment);
+                            }}
+                        />
                     ) : null}
                 </div>
 
@@ -88,4 +93,6 @@ const Team = ({ teamName /*index*/ }) => {
     );
 };
 
-export default memo(Team);
+export default memo(Team, (prevProps, nextProps) =>
+    compareArrays(prevProps.employees, nextProps.employees)
+);

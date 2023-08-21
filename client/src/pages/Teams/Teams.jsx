@@ -7,12 +7,10 @@ import { normalizeString } from '../../helpers/utils';
 
 import useTeams from '../../helpers/useTeams';
 import useAvatarsQuery from '../../helpers/queries/useAvatarsQuery';
-import useTeamsQuery from '../../helpers/queries/useTeamsQuery';
 import useSuggestions from '../../helpers/useSuggestions';
 
 import Loader from '../../components/Loader/Loader';
-//import Team from '../../components/Team/Team';
-import Team2 from '../../components/Team/Team.old.jsx';
+import Team from '../../components/Team/Team.jsx';
 import { useSearchStore } from '../../components/NavBar/NavBar';
 import { getTokenFromLocalStorage } from '../../auth/AuthProvider';
 
@@ -20,7 +18,10 @@ import styles from './Teams.module.scss';
 
 export const useEmployeeToScrollToStore = create((set) => ({
     employeeToScrollTo: {},
-    setEmployeeToScrollTo: (employeeToScrollTo) => set(() => ({ employeeToScrollTo }))
+    shouldScroll: true,
+    setEmployeeToScrollTo: (employeeToScrollTo) =>
+        set(() => ({ employeeToScrollTo, shouldScroll: true })),
+    setShouldScroll: (shouldScroll) => set(() => ({ shouldScroll }))
 }));
 
 const Teams = () => {
@@ -30,13 +31,18 @@ const Teams = () => {
         state.searchQuery,
         state.hasSearchedMinChars
     ]);
-    const setEmployeeToScrollTo = useEmployeeToScrollToStore(
-        (state) => state.setEmployeeToScrollTo
-    );
+    const [setEmployeeToScrollTo, setShouldScroll] = useEmployeeToScrollToStore((state) => [
+        state.setEmployeeToScrollTo,
+        state.setShouldScroll
+    ]);
 
     useAvatarsQuery();
     const { isLoading, teams, teamKeysSorted, departments, selectedTeam } = useTeams();
     const { suggestions, hasSuggestions } = useSuggestions();
+
+    useEffect(() => {
+        setShouldScroll(false);
+    }, [searchQuery]);
 
     useEffect(() => {
         if (selected && !selectedTeam) {
@@ -81,7 +87,7 @@ const Teams = () => {
                     searchQuery === '' ||
                     normalizeString(teamKey).includes(normalizeString(searchQuery)) ||
                     selectedTeamEmployees.length !== 0;
-                // return <Team key={teamKey} teamName={teamKey} index={index} />;
+
                 return (
                     <span
                         key={teamKey}
@@ -89,7 +95,7 @@ const Teams = () => {
                             display: `${show ? 'block' : 'none'}`,
                             order: selectedTeam === teamKey ? 0 : selectedTeam ? index + 1 : index
                         }}>
-                        <Team2 key={teamKey} teamName={teamKey} employees={teams[teamKey]} />
+                        <Team key={teamKey} teamName={teamKey} employees={teams[teamKey]} />
                     </span>
                 );
             })}

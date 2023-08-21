@@ -3,10 +3,11 @@ import { useMemo } from 'react';
 import { normalizeString } from './utils';
 import { useSearchStore } from '../components/NavBar/NavBar';
 
-const useTeams = (teamName = null) => {
+const useTeams = () => {
     const { data: teams, isLoading } = useTeamsQuery();
     const selected = useSearchStore((state) => state.selected);
     const searchQuery = useSearchStore((state) => state.searchQuery);
+
     const teamKeysSorted = useMemo(() => {
         if (isLoading) return [];
         return Object.keys(teams).sort();
@@ -40,21 +41,12 @@ const useTeams = (teamName = null) => {
             }, []);
     }, [teams, isLoading, teamKeysSorted]);
 
-    const employees =
-        (() => {
-            if (!teamName) return [];
-            if (!teams) return [];
-            return teams[teamName];
-        },
-        [teamName, teams]);
-
     return {
         isLoading,
         teams,
         selectedTeam,
         teamKeysSorted,
-        departments,
-        employees
+        departments
     };
 };
 
