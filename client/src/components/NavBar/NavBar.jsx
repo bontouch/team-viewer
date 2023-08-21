@@ -140,7 +140,10 @@ const NavBar = () => {
         setSearchQuery('');
         setSelectedName(null);
         setInputCaret && inputRef.current.focus();
-        window.scrollTo(0, 0);
+        window.scrollTo({
+            behavior: 'instant',
+            top: 0
+        });
     }, []);
 
     return (
