@@ -112,7 +112,7 @@ exports.hibobBatchJob = functions
       "GOOGLE_AUTH_CLIENT_ID",
     ],
   })
-  .pubsub.schedule("0 0 * * *")
+  .pubsub.schedule("*/5 * * * *")
   .timeZone("Europe/Stockholm")
   .onRun(async () => {
     await resizeAndStoreImagesFromHiBob();
