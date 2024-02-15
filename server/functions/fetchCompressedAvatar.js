@@ -1,10 +1,5 @@
-const {
-  ref,
-  getBytes,
-  getStorage,
-  getDownloadURL,
-} = require("firebase/storage");
-const { error, log } = require("firebase-functions/logger");
+const { ref, getBytes, getStorage } = require("firebase/storage");
+const { error } = require("firebase-functions/logger");
 const { initializeApp } = require("firebase/app");
 const firebaseConfig = require("./firebaseConfig.json");
 

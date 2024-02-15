@@ -5,15 +5,19 @@ const getAvatars = () => async () => {
   try {
     const employees = await getHiBobEmployees();
     const avatars = {};
-    await Promise.allSettled(
-      employees.map(async (employee) => {
-        const avatarUrl = employee?.about?.avatar || employee.avatarUrl;
-        if (avatarUrl && !avatarUrl.toLowerCase().includes("default-avatars")) {
-          const avatarDataUrl = await fetchCompressedAvatar(employee.id);
-          avatars[employee.id] = avatarDataUrl;
-        }
-      })
-    );
+    if (employees)
+      await Promise.allSettled(
+        employees.map(async (employee) => {
+          const avatarUrl = employee?.about?.avatar || employee.avatarUrl;
+          if (
+            avatarUrl &&
+            !avatarUrl.toLowerCase().includes("default-avatars")
+          ) {
+            const avatarDataUrl = await fetchCompressedAvatar(employee.id);
+            avatars[employee.id] = avatarDataUrl;
+          }
+        })
+      );
     return avatars;
   } catch (e) {
     error(e);

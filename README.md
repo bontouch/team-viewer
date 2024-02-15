@@ -34,11 +34,35 @@ To add a secret without logging into the firebase UI simply run:
 And then paste or write your secret for that key In the example above we set the secret for the key
 GOOGLE_AUTH_CLIENT_ID
 
-The client was made using create-react-app
+# Here are some helpful tips about the secrets:
+
+Change the value of an existing secret
+
+#### `firebase functions:secrets:set SECRET_NAME`
+
+View the value of a secret
+
+#### `firebase functions:secrets:access SECRET_NAME`
+
+Destroy a secret
+
+#### `firebase functions:secrets:destroy SECRET_NAME`
+
+View all secret versions and their state
+
+#### `firebase functions:secrets:get SECRET_NAME`
+
+Automatically clean up all secrets that aren't referenced by any of your functions
+
+#### `firebase functions:secrets:prune`
+
+# The client
+
+### The client was made using create-react-app
 
 ## Available Scripts
 
-In the project directory, you can run:
+### In the project directory, you can run:
 
 ### `npm start`
 

@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
             }
         } catch (e) {
             console.error(e);
+            return e;
         }
         return response.status;
     };

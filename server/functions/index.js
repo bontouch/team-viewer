@@ -92,7 +92,12 @@ app.get("/teams", async (req, res) => {
 
 exports.app = functions
   .runWith({
-    secrets: ["HIBOB_API_KEY", "GOOGLE_AUTH_CLIENT_ID", "JWT_SECRET"],
+    secrets: [
+      "HIBOB_SERVICE_USER_ID",
+      "HIBOB_SERVICE_USER_TOKEN",
+      "GOOGLE_AUTH_CLIENT_ID",
+      "JWT_SECRET",
+    ],
     memory: "4GB",
   })
   .https.onRequest(applyCorsMiddleWare(app));
@@ -101,7 +106,11 @@ exports.hibobBatchJob = functions
   .runWith({
     timeoutSeconds: 300,
     memory: "4GB",
-    secrets: ["HIBOB_API_KEY", "GOOGLE_AUTH_CLIENT_ID"],
+    secrets: [
+      "HIBOB_SERVICE_USER_ID",
+      "HIBOB_SERVICE_USER_TOKEN",
+      "GOOGLE_AUTH_CLIENT_ID",
+    ],
   })
   .pubsub.schedule("0 0 * * *")
   .timeZone("Europe/Stockholm")
