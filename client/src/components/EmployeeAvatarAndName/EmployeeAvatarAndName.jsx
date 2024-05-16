@@ -27,10 +27,7 @@ const AvatarAndName = memo(
                         <FontAwesomeIcon icon={faUser} size="7x" className={styles.icon} />
                     </div>
                 ) : (
-                    <div className={styles['avatar-icon-container']}>
-                        <FontAwesomeIcon icon={faUser} fade size="7x" className={styles.icon} />
-                    </div>
-                    /*<img className={styles.avatar} src={url} alt="employee avatar" />*/
+                    <img className={styles.avatar} src={url} alt="employee avatar" />
                 )}
                 <div className={styles['name-and-role-container']}>
                     <p className={classNames([styles.name, highlight ? styles.highlight : ''])}>
