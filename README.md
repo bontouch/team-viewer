@@ -31,7 +31,7 @@ To add a secret without logging into the firebase UI simply run:
 
 ### `firebase functions:secrets:set GOOGLE_AUTH_CLIENT_ID`
 
-And then paste or write your secret for that key In the example above we set the secret for the key
+Then paste or write your secret for that key. In the example above we set the secret for the key
 GOOGLE_AUTH_CLIENT_ID
 
 # Here are some helpful tips about the secrets:

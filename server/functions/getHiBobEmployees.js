@@ -15,10 +15,8 @@ const getHiBobEmployees = async () => {
         },
       }
     );
-    console.log("response");
     return response.data.employees;
   } catch (e) {
-    console.log("error");
     console.error(e);
   }
 };

@@ -85,6 +85,7 @@ const Team = ({ teamName, employees }) => {
                             department={employee.department}
                             role={employee.department}
                             teamName={teamName}
+                            title={employee.title}
                         />
                     ))}
                 </ul>
