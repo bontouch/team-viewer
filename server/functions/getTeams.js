@@ -10,6 +10,7 @@ const groupEmployeesByProductTeam = (array) => {
         fullName: curr.fullName,
         department: curr.work.department,
         id: curr.id,
+        title: curr.work.title === "-" ? undefined : curr.work.title,
       };
       productTeam in acc
         ? acc[productTeam].push(employee)

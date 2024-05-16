@@ -8,11 +8,16 @@ import styles from './EmployeeAvatarAndName.module.scss';
 import { useEmployeeToScrollToStore } from '../../pages/Teams/Teams';
 
 const AvatarAndName = memo(
-    forwardRef(({ isLoading, url, fullName, role, highlight }, ref) => {
+    forwardRef(({ isLoading, url, fullName, role, highlight, title }, ref) => {
         return (
             <li
                 className={classNames([styles['employee-item'], highlight ? styles.highlight : ''])}
                 ref={ref}>
+                {title ? (
+                    <span className={classNames([styles.pill, styles.title])}>
+                        <p className={styles.role}>{title}</p>
+                    </span>
+                ) : null}
                 {isLoading ? (
                     <div className={styles['avatar-icon-container']}>
                         <FontAwesomeIcon icon={faUser} fade size="7x" className={styles.icon} />
@@ -37,7 +42,7 @@ const AvatarAndName = memo(
     })
 );
 
-const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, teamName }) => {
+const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, teamName, title }) => {
     const selected = useSearchStore((state) => state.selected);
     const [{ employeeToScrollTo, teamKey }, shouldScroll] = useEmployeeToScrollToStore((state) => [
         state.employeeToScrollTo,
@@ -74,6 +79,7 @@ const EmployeeAvatarAndName = ({ fullName, url, isLoading, role, department, tea
             role={role}
             department={department}
             highlight={highlight}
+            title={title}
             ref={ref}
         />
     );
