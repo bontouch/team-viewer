@@ -1,20 +1,20 @@
 .teams {
     &:before {
-        height: 10rem;
+        height: 10.3rem;
         display: block;
         content: '';
     }
-    &:after{
-        height: 2.5rem;
-        display: block;
-        content: '';
-    }
-
     display: flex;
     flex-direction: column;
+    gap: 3.7rem;
+    li {
+        &:last-child {
+            margin-bottom: 4rem;
+        }
+    }
 }
 
-.no-result{
+.no-result {
     font-size: xx-large;
     margin: 0 auto;
     width: auto;

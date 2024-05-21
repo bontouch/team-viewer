@@ -86,6 +86,7 @@ const Team = ({ teamName, employees }) => {
                             role={employee.department}
                             teamName={teamName}
                             title={employee.title}
+                            leavePolicy={employee.leavePolicy}
                         />
                     ))}
                 </ul>
