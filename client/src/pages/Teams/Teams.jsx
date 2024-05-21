@@ -70,7 +70,7 @@ const Teams = () => {
     }
 
     return (
-        <div className={styles.teams}>
+        <ul className={styles.teams}>
             {hasSearchedMinChars && !hasSuggestions ? (
                 <h3 className={styles['no-result']}>
                     No Search Results for <span style={{ color: '#8f8f8f' }}>{searchQuery}</span>
@@ -89,17 +89,18 @@ const Teams = () => {
                     selectedTeamEmployees.length !== 0;
 
                 return (
-                    <span
+                    <li
                         key={teamKey}
                         style={{
                             display: `${show ? 'block' : 'none'}`,
-                            order: selectedTeam === teamKey ? 0 : selectedTeam ? index + 1 : index
+                            order:
+                                selectedTeam === teamKey ? 1 : selectedTeam ? index + 2 : index + 1
                         }}>
                         <Team key={teamKey} teamName={teamKey} employees={teams[teamKey]} />
-                    </span>
+                    </li>
                 );
             })}
-        </div>
+        </ul>
     );
 };
 

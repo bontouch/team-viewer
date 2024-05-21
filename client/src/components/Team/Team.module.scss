@@ -1,40 +1,40 @@
-.container{
-  max-width: 120rem;
-  position: relative;
-  margin: 2rem auto 4rem;
+.container {
+    max-width: 120rem;
+    position: relative;
+    margin: 0 auto;
 }
 
-.border{
-  border-radius: 2.4rem;
-  background: #F5F7FA;
-  padding: 2.4rem;
+.border {
+    border-radius: 2.4rem;
+    background: #f5f7fa;
+    padding: 2.4rem;
 }
 
-.title{
-  color: black;
-  flex: 1;
-  font-size: 3.2rem;
-  font-weight: 400;
-  line-height: 3.8rem;
-  letter-spacing: 0;
-  text-align: left;
+.title {
+    color: black;
+    flex: 1;
+    font-size: 3.2rem;
+    font-weight: 400;
+    line-height: 3.8rem;
+    letter-spacing: 0;
+    text-align: left;
 }
 
-.wrapper{
-  position: relative;
-  margin-bottom: 2rem;
-  display: flex;
-  flex-wrap: wrap;
+.wrapper {
+    position: relative;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.employee-list-container{
-  list-style-type: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 3.2rem;
-  place-content: center;
-  place-items: center;
-  max-width: 120rem;
-  margin: 0 auto;
-  align-items: start;
+.employee-list-container {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 3.2rem;
+    place-content: center;
+    place-items: center;
+    max-width: 120rem;
+    margin: 0 auto;
+    align-items: start;
 }

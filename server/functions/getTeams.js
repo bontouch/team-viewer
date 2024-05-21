@@ -1,4 +1,5 @@
 const getHiBobEmployees = require("./getHiBobEmployees");
+const getHiBobWhosOutToday = require("./getHiBobWhosOutToday");
 
 const groupEmployeesByProductTeam = (array) => {
   return array.reduce((acc, curr) => {
@@ -11,6 +12,7 @@ const groupEmployeesByProductTeam = (array) => {
         department: curr.work.department,
         id: curr.id,
         title: curr.work.title === "-" ? undefined : curr.work.title,
+        leavePolicy: curr.leavePolicy,
       };
       productTeam in acc
         ? acc[productTeam].push(employee)
@@ -22,7 +24,17 @@ const groupEmployeesByProductTeam = (array) => {
 
 const getTeams = async () => {
   const employees = await getHiBobEmployees();
-  return groupEmployeesByProductTeam(employees);
+  const whosOut = await getHiBobWhosOutToday();
+
+  const employeesWithLeavePolicy = employees.map((employee) =>
+    Object.assign({}, employee, {
+      leavePolicy: whosOut.find(
+        (employeeOnLeave) => employeeOnLeave.employeeId === employee.id
+      )?.policyTypeDisplayName,
+    })
+  );
+
+  return groupEmployeesByProductTeam(employeesWithLeavePolicy);
 };
 
 module.exports = getTeams;
