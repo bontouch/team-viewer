@@ -90,6 +90,7 @@ const Teams = () => {
 
                 return (
                     <li
+                        className={styles.team}
                         key={teamKey}
                         style={{
                             display: `${show ? 'block' : 'none'}`,
