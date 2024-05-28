@@ -68,7 +68,7 @@ const Login = () => {
             <img className={styles.image} src={SignInImage} alt="" />
             <BTLogo className={styles.logo} />
             <h1 className={styles.title}>Bontouch Team Viewer</h1>
-            <p className={styles.text}>Let’s find some people...</p>
+            {/* <p className={styles.text}>Let’s find some people...</p> */}
             <div className={styles.wrapper}>
                 <div
                     id="signInDiv"

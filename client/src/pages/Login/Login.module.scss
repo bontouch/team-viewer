@@ -1,53 +1,43 @@
-.container{
-  position: relative;
-  height: auto;
-  margin: 0 auto;
-  text-align: center;
-  padding: 2rem;
-  background-color: #32353F;
-  min-height: 100vh;
+.container {
+    position: relative;
+    height: auto;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2rem;
+    background-color: #32353f;
+    min-height: 100vh;
 }
 
 .image {
-  max-width: 54rem;
-  width: 100%;
-  margin: 8vh 0 5rem;
+    max-width: 54rem;
+    width: 100%;
+    margin: 8vh 0 5rem;
 }
 
-.logo{
-  display: block;
-  margin: 0 auto 5rem;
+.logo {
+    display: block;
+    margin: 0 auto 5rem;
 }
 
-.title{
-  line-height: 3.84rem;
-  font-weight: 300;
-  font-size: 3.2rem;
-  color: #ffffff;
-  text-align: center;
-  margin-bottom: 2.5rem;
+.title {
+    line-height: 3.84rem;
+    font-weight: 300;
+    font-size: 3.2rem;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 5rem;
 }
 
-.text{
-  font-size: 1.6rem;
-  font-weight: 300;
-  line-height: 1.9rem;
-  letter-spacing: 0rem;
-  color: #ffffff;
-  text-align: center;
-  margin-bottom: 5rem;
+.wrapper {
+    width: 100%;
+    position: relative;
+    height: 4rem;
 }
 
-.wrapper{
-  width: 100%;
-  position: relative;
-  height: 4rem;
-}
-
-.google{
-  position: absolute;
-  width: auto;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1001;
+.google {
+    position: absolute;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
 }
