@@ -1,3 +1,4 @@
+@import 'variables';
 .container {
     max-width: 120rem;
     position: relative;
@@ -30,7 +31,7 @@
 .employee-list-container {
     list-style-type: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax($avatar-image-width, 1fr));
     gap: 3.2rem;
     place-content: center;
     place-items: center;

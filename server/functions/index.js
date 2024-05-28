@@ -1,8 +1,6 @@
 const express = require("express");
 const { expressjwt } = require("express-jwt");
 const functions = require("firebase-functions");
-//logger/compat is for console log
-//require("firebase-functions/logger/compat");
 const resizeAndStoreImagesFromHiBob = require("./compressAndUpload/resizeAndStoreImagesFromHiBob");
 const getTeams = require("./getTeams");
 const authWithGoogle = require("./AuthWithGoogle");
@@ -93,6 +91,7 @@ app.get("/teams", async (req, res) => {
 exports.app = functions
   .runWith({
     secrets: [
+      "SLACK_OAUTH_TOKEN",
       "HIBOB_SERVICE_USER_ID",
       "HIBOB_SERVICE_USER_TOKEN",
       "GOOGLE_AUTH_CLIENT_ID",

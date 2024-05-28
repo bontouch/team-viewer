@@ -87,6 +87,8 @@ const Team = ({ teamName, employees }) => {
                             teamName={teamName}
                             title={employee.title}
                             leavePolicy={employee.leavePolicy}
+                            slackLink={employee.slackLink}
+                            hiBobLink={employee.hiBobLink}
                         />
                     ))}
                 </ul>

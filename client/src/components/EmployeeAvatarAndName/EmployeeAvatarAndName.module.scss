@@ -1,4 +1,5 @@
 $employee-item-padding: 1.2rem;
+@import 'variables';
 .employee-item {
     padding: $employee-item-padding;
     background: white;
@@ -13,11 +14,17 @@ $employee-item-padding: 1.2rem;
     &.highlight {
         background: #2ca3e8;
     }
+    &:hover {
+        .slack-and-hiBob-links {
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
 }
 
 .avatar-icon-container {
-    width: 14rem;
-    height: 14rem;
+    width: $avatar-image-width;
+    height: $avatar-image-width;
     position: relative;
     display: inline-block;
     margin-bottom: 1rem;
@@ -32,8 +39,8 @@ $employee-item-padding: 1.2rem;
 }
 
 .avatar {
-    width: 14rem;
-    height: 14rem;
+    width: $avatar-image-width;
+    height: $avatar-image-width;
     border-radius: 0.8rem;
     object-fit: cover;
     object-position: 50% 0;
@@ -64,16 +71,17 @@ $employee-item-padding: 1.2rem;
 }
 
 .status-list {
+    $topAndLeft: 0.8rem;
     list-style: none;
     position: absolute;
-    top: calc($employee-item-padding + 0.8rem);
-    left: calc($employee-item-padding + 0.8rem);
+    top: calc($employee-item-padding + $topAndLeft);
+    left: calc($employee-item-padding + $topAndLeft);
     flex-wrap: wrap;
     gap: 0.4rem 0.8rem;
     margin: 0;
     padding: 0;
     display: flex;
-    width: calc(100% - $employee-item-padding - $employee-item-padding);
+    width: calc($avatar-image-width - ($topAndLeft * 2));
 }
 
 .role {
@@ -88,5 +96,46 @@ $employee-item-padding: 1.2rem;
 }
 
 .name-and-role-container {
-    width: 14rem;
+    width: $avatar-image-width;
+}
+
+.slack-and-hiBob-links {
+    position: absolute;
+    top: $employee-item-padding;
+    left: $employee-item-padding;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: $avatar-image-width;
+    height: $avatar-image-width;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%),
+        rgb(211, 211, 211, 0.4) 50% / cover no-repeat;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 0.8rem;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+    }
+}
+
+.link-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    &.hiBob {
+        background-image: url('/images/hiBob.svg');
+    }
+    &.slack {
+        background-image: url('/images/slack.svg');
+    }
 }
