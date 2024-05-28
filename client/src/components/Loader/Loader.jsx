@@ -5,7 +5,7 @@ import styles from './Loader.module.scss';
 const Loader = () => (
     <div className={styles.load}>
         <span>
-            <FontAwesomeIcon icon={faSpinner} spin size="10x" style={{ color: '#4db66b' }} />
+            <FontAwesomeIcon icon={faSpinner} spin size="10x" className={styles.icon} />
         </span>
     </div>
 );

@@ -1,10 +1,11 @@
+@import 'variables';
 .container {
     position: relative;
     height: auto;
     margin: 0 auto;
     text-align: center;
     padding: 2rem;
-    background-color: #32353f;
+    background-color: $primary-theme-color;
     min-height: 100vh;
 }
 
