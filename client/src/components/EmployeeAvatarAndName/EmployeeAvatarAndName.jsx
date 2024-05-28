@@ -8,6 +8,7 @@ import styles from './EmployeeAvatarAndName.module.scss';
 import { useEmployeeToScrollToStore } from '../../pages/Teams/Teams';
 import { ReactComponent as ParentalLeaveIcon } from 'images/parental-leave.svg';
 import { ReactComponent as VacationIcon } from 'images/vacation.svg';
+import { ReactComponent as LoadingAvatar } from 'images/loading.svg';
 
 const PolicyIcon = ({ leavePolicy }) => {
     switch (leavePolicy) {
@@ -86,7 +87,9 @@ const AvatarAndName = memo(
                     <StatusList title={title} leavePolicy={leavePolicy} />
                     {isLoading ? (
                         <div className={styles['avatar-icon-container']}>
-                            <FontAwesomeIcon icon={faUser} fade size="7x" className={styles.icon} />
+                            <LoadingAvatar
+                                className={classNames([styles['loading-icon'], styles.icon])}
+                            />
                         </div>
                     ) : !url ? (
                         <div className={styles['avatar-icon-container']}>

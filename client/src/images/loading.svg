@@ -1,0 +1,15 @@
+<svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="140" height="140" fill="#F5F5F5"/>
+<g id="Card">
+<rect x="-43.5" y="-1047.5" width="689" height="1317" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+<g id="Active=False, Status=None, Type=Default, State=Hover">
+<rect x="-12" y="-12" width="164" height="227" rx="16" fill="white"/>
+<g id="Image">
+<g id="Image_2">
+<rect width="140" height="140" rx="8" fill="#F5F7FA"/>
+<rect x="0.25" y="0.25" width="139.5" height="139.5" rx="7.75" stroke="black" stroke-opacity="0.1" stroke-width="0.5"/>
+</g>
+</g>
+</g>
+</g>
+</svg>
