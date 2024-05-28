@@ -58,8 +58,10 @@ const SlackAndHiBobLinks = ({ slackLink, hiBobLink }) => {
                 {hiBobLink ? (
                     <li>
                         <a
+                            target="_blank"
                             href={hiBobLink}
                             className={classNames([styles['link-icon'], styles['hiBob']])}
+                            rel="noreferrer"
                         />
                     </li>
                 ) : null}
