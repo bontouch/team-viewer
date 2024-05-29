@@ -1,9 +1,8 @@
 $avatar-image-width: 14rem;
 $primary-theme-color: #32353f;
-$test: green;
-
+$highlighted-color: #2ca3e8;
 :export {
     avatar-image-width: $avatar-image-width;
     primary-theme-color: $primary-theme-color;
-    test: $test;
+    highlighted-color: $highlighted-color;
 }

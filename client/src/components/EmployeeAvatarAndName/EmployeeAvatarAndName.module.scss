@@ -1,5 +1,7 @@
-$employee-item-padding: 1.2rem;
 @import 'variables';
+
+$employee-item-padding: 1.2rem;
+
 .employee-item {
     padding: $employee-item-padding;
     background: white;
@@ -12,7 +14,7 @@ $employee-item-padding: 1.2rem;
         font-weight: 600;
     }
     &.highlight {
-        background: #2ca3e8;
+        background: $highlighted-color;
     }
     &:hover {
         .slack-and-hiBob-links {
@@ -31,11 +33,38 @@ $employee-item-padding: 1.2rem;
 }
 
 .icon {
-    color: #4db66b;
+    color: $primary-theme-color;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate3d(-50%, -50%, 0);
+}
+
+.loading-icon {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    mask: linear-gradient(135deg, #000 30%, #0008, #000 75%) right/500% 100%;
+    background-repeat: no-repeat;
+    animation: shimmerAnimation 1.5s ease infinite forwards, pulsate 1.5s linear infinite;
+}
+
+@keyframes pulsate {
+    from {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shimmerAnimation {
+    100% {
+        mask-position: left;
+    }
 }
 
 .avatar {
@@ -82,6 +111,7 @@ $employee-item-padding: 1.2rem;
     padding: 0;
     display: flex;
     width: calc($avatar-image-width - ($topAndLeft * 2));
+    z-index: 1;
 }
 
 .role {
