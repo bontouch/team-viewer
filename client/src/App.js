@@ -15,7 +15,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route
-                            path="/teams"
+                            path="/teams?/:searchQuery"
                             element={
                                 <ProtectedRoute>
                                     <NavBar />
