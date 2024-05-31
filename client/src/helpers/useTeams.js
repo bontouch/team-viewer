@@ -10,7 +10,7 @@ const useTeams = () => {
 
     const teamKeysSorted = useMemo(() => {
         if (isLoading) return [];
-        return Object.keys(teams).sort();
+        return Object.keys(teams).sort((a, b) => a.localeCompare(b));
     }, [teams, isLoading]);
 
     const selectedTeam = useMemo(() => {
