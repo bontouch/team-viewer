@@ -11,7 +11,7 @@ import { ReactComponent as CloseIcon } from '../../images/close.svg';
 import { ReactComponent as BTLogo } from '../../images/BTLogo.svg';
 
 import styles from './NavBar.module.scss';
-//import { scrollIntoViewWithOffset } from '../../helpers/utils';
+import { useInitialSearchStore } from 'helpers/useUrl';
 
 const initialState = {
     searchQuery: '',
@@ -31,13 +31,15 @@ const NavBar = () => {
     const setSearchQuery = useSearchStore((state) => state.setSearchQuery);
     const setSelected = useSearchStore((state) => state.setSelected);
     const selected = useSearchStore((state) => state.selected);
-    const { suggestions } = useSuggestions();
+    const initialSearchQuery = useInitialSearchStore((state) => state.initialSearchQuery);
+    const { suggestions, allSearchable } = useSuggestions();
     const [inputValue, setInputValue] = useState(selected ?? '');
     const inputRef = useRef(null);
     const clearButtonRef = useRef(null);
     const [inputClientRect, setInputClientRect] = useState(null);
     const [open, setOpen] = useState(false);
     const [selectedName, setSelectedName] = useState(null);
+    const [hasSetInitial, setHasSetInitial] = useState(false);
 
     const listClickOutsideCallback = useCallback(
         (e) => {
@@ -118,6 +120,21 @@ const NavBar = () => {
         setSelected(e.target.innerText);
         setOpen(false);
     };
+    useEffect(() => {
+        if (initialSearchQuery && Object.keys(allSearchable).length && !hasSetInitial) {
+            const name = allSearchable[initialSearchQuery];
+            if (name) {
+                setInputValue(name);
+                setSearchQuery(name);
+                setSelectedName(name);
+                setSelected(name);
+                setHasSetInitial(true);
+                inputRef.current.value = name;
+                setOpen(false);
+                setTimeout(() => inputRef.current.blur(), 100);
+            }
+        }
+    }, [initialSearchQuery, allSearchable]);
 
     useEffect(() => {
         if (
@@ -145,8 +162,6 @@ const NavBar = () => {
         setSearchQuery('');
         setSelectedName(null);
         setInputCaret && inputRef.current.focus();
-
-        //scrollIntoViewWithOffset(window.document.body, -10000, 'auto');
     }, []);
 
     return (
